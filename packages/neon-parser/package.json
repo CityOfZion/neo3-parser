@@ -1,0 +1,25 @@
+{
+  "name": "@cityofzion/neon-parser",
+  "version": "1.0.1",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@cityofzion/neon-js": "^5.2.0",
+    "@cityofzion/neo3-parser": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CityOfZion/neo3-parser.git",
+    "directory": "packages/neon-parser"
+  }
+}
