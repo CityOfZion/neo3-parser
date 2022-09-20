@@ -11,8 +11,8 @@ export const NeonParser: Neo3Parser = {
   accountInputToAddress(input: string): string {
     return new wallet.Account(input).address
   },
-  addressToScripthash(input: string): string {
-    return wallet.getScriptHashFromAddress(input)
+  accountInputToScripthash(input: string): string {
+    return new wallet.Account(input).scriptHash
   },
   base64ToHex: (input: string): string => {
     return u.base642hex(input)

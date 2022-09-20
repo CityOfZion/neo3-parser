@@ -15,19 +15,19 @@ importers:
 
   ../../packages/neon-parser:
     specifiers:
-      '@cityofzion/neo3-parser': ^1.3.1
+      '@cityofzion/neo3-parser': 1.4.0
       '@cityofzion/neon-js': ^5.2.0
       typescript: ^4.3.2
     dependencies:
-      '@cityofzion/neo3-parser': 1.3.1
+      '@cityofzion/neo3-parser': 1.4.0
       '@cityofzion/neon-js': 5.2.0
     devDependencies:
       typescript: 4.8.3
 
 packages:
 
-  /@cityofzion/neo3-parser/1.3.1:
-    resolution: {integrity: sha512-Byjks/KQ+FJQptYD10v3/jB7jg8uW/jJcaU23xMW8ZXduEZ9hgGEE5s8byjd+F5zTTVrA2B2G7jhA06SVlYLPA==}
+  /@cityofzion/neo3-parser/1.4.0:
+    resolution: {integrity: sha512-SjdV6aOwF1uy1eJazrEv28772HMspEbC/dOU3actw2SYEDu3ANkKyqmnlN7yIXa0eqotQlCO41twTcybhi3GZw==}
     dev: false
 
   /@cityofzion/neon-api/5.2.0_@cityofzion+neon-core@5.2.0:

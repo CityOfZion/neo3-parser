@@ -67,10 +67,10 @@ export interface Neo3Parser {
      */
     base64ToUtf8: (input: string) => string;
     /**
-     * Converts an address to scripthash.
+     * Converts an account input such Address, PublicKey or ScriptHash to an ScriptHash.
      * @param input
      */
-    addressToScripthash: (input: string) => string;
+    accountInputToScripthash: (input: string) => string;
     /**
      * Converts a string to base64
      * @param input The string to convert

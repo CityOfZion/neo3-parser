@@ -12,8 +12,8 @@ exports.NeonParser = {
     accountInputToAddress(input) {
         return new neon_js_1.wallet.Account(input).address;
     },
-    addressToScripthash(input) {
-        return neon_js_1.wallet.getScriptHashFromAddress(input);
+    accountInputToScripthash(input) {
+        return new neon_js_1.wallet.Account(input).scriptHash;
     },
     base64ToHex: (input) => {
         return neon_js_1.u.base642hex(input);
