@@ -61,7 +61,13 @@ exports.NeonParser = {
                 if (rawValue.length === 40) {
                     return `0x${neon_js_1.u.reverseHex(rawValue)}`;
                 }
-                return neon_js_1.u.hexstring2str(rawValue);
+                const asStr = neon_js_1.u.hexstring2str(rawValue);
+                try {
+                    return JSON.parse(asStr);
+                }
+                catch (e) {
+                    return asStr;
+                }
             case "Integer":
                 return parseInt(field.value);
             case "Array":
