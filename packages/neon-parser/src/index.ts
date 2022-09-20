@@ -60,7 +60,12 @@ export const NeonParser: Neo3Parser = {
         if (rawValue.length === 40) {
           return `0x${u.reverseHex(rawValue)}`
         }
-        return u.hexstring2str(rawValue)
+        const asStr = u.hexstring2str(rawValue)
+        try {
+          return JSON.parse(asStr)
+        } catch (e) {
+          return asStr
+        }
       case "Integer":
         return parseInt(field.value)
       case "Array":
