@@ -75,7 +75,12 @@ export interface Neo3Parser {
      * Converts a string to base64
      * @param input The string to convert
      */
-    stringToBase64: (input: string) => string;
+    strToBase64: (input: string) => string;
+    /**
+     * Converts an account input such Address, PublicKey or ScriptHash to an Address.
+     * @param input
+     */
+    accountInputToAddress: (input: string) => string;
     /**
      * Reverses a HEX string, treating 2 chars as a byte.
      * @param input

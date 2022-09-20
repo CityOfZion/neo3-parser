@@ -8,8 +8,14 @@ export const NeonParser: Neo3Parser = {
   abToStr(buf: ArrayBuffer | ArrayLike<number>): string {
     return u.ab2str(buf)
   },
+  accountInputToAddress(input: string): string {
+    return new wallet.Account(input).address
+  },
   addressToScripthash(input: string): string {
     return wallet.getScriptHashFromAddress(input)
+  },
+  base64ToHex: (input: string): string => {
+    return u.base642hex(input)
   },
   base64ToUtf8(input: string): string {
     return u.base642utf8(input)
@@ -38,17 +44,14 @@ export const NeonParser: Neo3Parser = {
   strToAb(str: string): Uint8Array {
     return u.str2ab(str)
   },
+  strToBase64: (input: string): string => {
+    return u.hex2base64(u.str2hexstring(input))
+  },
   strToHexstring(str: string): string {
     return u.str2hexstring(str)
   },
   utf8ToBase64(input: string): string {
     return u.utf82base64(input)
-  },
-  stringToBase64: (input: string): string => {
-    return u.hex2base64(u.str2hexstring(input))
-  },
-  base64ToHex: (input: string): string => {
-    return u.base642hex(input)
   },
   parseRpcResponse(field: any): any {
     switch (field.type) {

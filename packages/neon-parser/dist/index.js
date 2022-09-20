@@ -9,8 +9,14 @@ exports.NeonParser = {
     abToStr(buf) {
         return neon_js_1.u.ab2str(buf);
     },
+    accountInputToAddress(input) {
+        return new neon_js_1.wallet.Account(input).address;
+    },
     addressToScripthash(input) {
         return neon_js_1.wallet.getScriptHashFromAddress(input);
+    },
+    base64ToHex: (input) => {
+        return neon_js_1.u.base642hex(input);
     },
     base64ToUtf8(input) {
         return neon_js_1.u.base642utf8(input);
@@ -39,17 +45,14 @@ exports.NeonParser = {
     strToAb(str) {
         return neon_js_1.u.str2ab(str);
     },
+    strToBase64: (input) => {
+        return neon_js_1.u.hex2base64(neon_js_1.u.str2hexstring(input));
+    },
     strToHexstring(str) {
         return neon_js_1.u.str2hexstring(str);
     },
     utf8ToBase64(input) {
         return neon_js_1.u.utf82base64(input);
-    },
-    stringToBase64: (input) => {
-        return neon_js_1.u.hex2base64(neon_js_1.u.str2hexstring(input));
-    },
-    base64ToHex: (input) => {
-        return neon_js_1.u.base642hex(input);
     },
     parseRpcResponse(field) {
         switch (field.type) {
