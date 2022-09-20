@@ -5,6 +5,9 @@ export const NeonParser: Neo3Parser = {
   stringToBase64: (input: string): string => {
     return u.hex2base64(u.str2hexstring(input))
   },
+  base64ToHex: (input: string): string => {
+    return u.base642hex(input)
+  },
   formatResponse(field: any): any {
     switch (field.type) {
       case "ByteString":

@@ -5,6 +5,11 @@ export interface Neo3Parser {
      */
     stringToBase64: (input: string) => string;
     /**
+     * Converts a base64 string to hex
+     * @param input
+     */
+    base64ToHex: (input: string) => string;
+    /**
      * Formats the response from the RPC server to an easier to use format for dapp developers
      * @param input The response from the RPC server
      */

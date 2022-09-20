@@ -6,6 +6,9 @@ exports.NeonParser = {
     stringToBase64: (input) => {
         return neon_js_1.u.hex2base64(neon_js_1.u.str2hexstring(input));
     },
+    base64ToHex: (input) => {
+        return neon_js_1.u.base642hex(input);
+    },
     formatResponse(field) {
         switch (field.type) {
             case "ByteString":
