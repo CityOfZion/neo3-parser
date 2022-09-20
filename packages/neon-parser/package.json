@@ -1,6 +1,6 @@
 {
   "name": "@cityofzion/neon-parser",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
