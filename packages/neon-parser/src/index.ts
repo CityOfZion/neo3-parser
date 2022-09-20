@@ -77,7 +77,11 @@ export const NeonParser: Neo3Parser = {
         })
         return object
       default:
-        return field.value
+        try {
+          return JSON.parse(field.value)
+        } catch (e) {
+          return field.value
+        }
     }
   }
 }
