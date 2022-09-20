@@ -3,13 +3,55 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeonParser = void 0;
 const neon_js_1 = require("@cityofzion/neon-js");
 exports.NeonParser = {
+    abToHexstring(arr) {
+        return neon_js_1.u.ab2hexstring(arr);
+    },
+    abToStr(buf) {
+        return neon_js_1.u.ab2str(buf);
+    },
+    addressToScripthash(input) {
+        return neon_js_1.wallet.getScriptHashFromAddress(input);
+    },
+    base64ToUtf8(input) {
+        return neon_js_1.u.base642utf8(input);
+    },
+    hexToBase64(input) {
+        return neon_js_1.u.hex2base64(input);
+    },
+    hexstringToAb(str) {
+        return neon_js_1.u.hexstring2ab(str);
+    },
+    hexstringToStr(hexstring) {
+        return neon_js_1.u.hexstring2str(hexstring);
+    },
+    intToHex(num) {
+        return neon_js_1.u.int2hex(num);
+    },
+    numToHexstring(num, size, littleEndian) {
+        return neon_js_1.u.num2hexstring(num, size, littleEndian);
+    },
+    numToVarInt(num) {
+        return neon_js_1.u.num2VarInt(num);
+    },
+    reverseHex(input) {
+        return neon_js_1.u.reverseHex(input);
+    },
+    strToAb(str) {
+        return neon_js_1.u.str2ab(str);
+    },
+    strToHexstring(str) {
+        return neon_js_1.u.str2hexstring(str);
+    },
+    utf8ToBase64(input) {
+        return neon_js_1.u.utf82base64(input);
+    },
     stringToBase64: (input) => {
         return neon_js_1.u.hex2base64(neon_js_1.u.str2hexstring(input));
     },
     base64ToHex: (input) => {
         return neon_js_1.u.base642hex(input);
     },
-    formatResponse(field) {
+    parseRpcResponse(field) {
         switch (field.type) {
             case "ByteString":
                 const rawValue = neon_js_1.u.base642hex(field.value);
@@ -21,13 +63,13 @@ exports.NeonParser = {
                 return parseInt(field.value);
             case "Array":
                 return field.value.map((f) => {
-                    return exports.NeonParser.formatResponse(f);
+                    return exports.NeonParser.parseRpcResponse(f);
                 });
             case "Map":
                 const object = {};
                 field.value.forEach((f) => {
-                    let key = exports.NeonParser.formatResponse(f.key);
-                    object[key] = exports.NeonParser.formatResponse(f.value);
+                    let key = exports.NeonParser.parseRpcResponse(f.key);
+                    object[key] = exports.NeonParser.parseRpcResponse(f.value);
                 });
                 return object;
             default:

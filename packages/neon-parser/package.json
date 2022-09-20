@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@cityofzion/neon-js": "^5.2.0",
-    "@cityofzion/neo3-parser": "^1.1.0"
+    "@cityofzion/neo3-parser": "^1.2.0"
   },
   "devDependencies": {
     "typescript": "^4.3.2"
