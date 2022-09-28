@@ -57,9 +57,6 @@ export const NeonParser: Neo3Parser = {
     switch (field.type) {
       case "ByteString":
         const rawValue = u.base642hex(field.value)
-        if (/^[a-fA-F\d]{40}$/.test(rawValue)) {
-          return `0x${u.reverseHex(rawValue)}`
-        }
         const asStr = u.hexstring2str(rawValue)
         try {
           return JSON.parse(asStr)
