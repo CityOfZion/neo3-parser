@@ -58,9 +58,6 @@ exports.NeonParser = {
         switch (field.type) {
             case "ByteString":
                 const rawValue = neon_js_1.u.base642hex(field.value);
-                if (/^[a-fA-F\d]{40}$/.test(rawValue)) {
-                    return `0x${neon_js_1.u.reverseHex(rawValue)}`;
-                }
                 const asStr = neon_js_1.u.hexstring2str(rawValue);
                 try {
                     return JSON.parse(asStr);
