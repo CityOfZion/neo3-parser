@@ -1,4 +1,4 @@
-import { Neo3Parser, RpcResponseParser } from '@cityofzion/neo3-parser'
+import { Neo3Parser, ParseConfig } from '@cityofzion/neo3-parser'
 import { u, wallet } from '@cityofzion/neon-js'
 
 export const NeonParser: Neo3Parser = {
@@ -53,23 +53,32 @@ export const NeonParser: Neo3Parser = {
   utf8ToBase64(input: string): string {
     return u.utf82base64(input)
   },
-  parseRpcResponse(field: any, customParser: RpcResponseParser = DefaultNeonRpcResponseParser): any {
+  parseRpcResponse(field: any, parseConfig?: ParseConfig): any {
     switch (field.type) {
       case "ByteString":
-        return customParser.ByteString(field.value)
+        const rawValue = NeonParser.base64ToHex(field.value)
+        if (rawValue.length === 40 && parseConfig?.ByteStringToScriptHash) {
+          return `0x${NeonParser.reverseHex(rawValue)}`
+        }
+        const asStr = NeonParser.hexstringToStr(rawValue)
+        try {
+          return JSON.parse(asStr)
+        } catch (e) {
+          return asStr
+        }
       case "Integer":
         return parseInt(field.value)
       case "Array":
         return field.value.map( (f: any) => {
-          return NeonParser.parseRpcResponse(f, customParser)
+          return NeonParser.parseRpcResponse(f, parseConfig)
         })
       case "Map":
         const object: {
           [key: string]: any
         } = {}
         field.value.forEach((f: any) => {
-          let key: string = NeonParser.parseRpcResponse(f.key, customParser)
-          object[key] = NeonParser.parseRpcResponse(f.value, customParser)
+          let key: string = NeonParser.parseRpcResponse(f.key, parseConfig)
+          object[key] = NeonParser.parseRpcResponse(f.value, parseConfig)
         })
         return object
       default:
@@ -78,33 +87,6 @@ export const NeonParser: Neo3Parser = {
         } catch (e) {
           return field.value
         }
-    }
-  }
-}
-
-export const DefaultNeonRpcResponseParser: RpcResponseParser = {
-  ByteString(input: string): any {
-    const rawValue = NeonParser.base64ToHex(input)
-    const asStr = NeonParser.hexstringToStr(rawValue)
-    try {
-      return JSON.parse(asStr)
-    } catch (e) {
-      return asStr
-    }
-  }
-}
-
-export const HexNeonRpcResponseParser: RpcResponseParser = {
-  ByteString(input: string): any {
-    const rawValue = NeonParser.base64ToHex(input)
-    if (rawValue.length === 40) {
-      return `0x${NeonParser.reverseHex(rawValue)}`
-    }
-    const asStr = NeonParser.hexstringToStr(rawValue)
-    try {
-      return JSON.parse(asStr)
-    } catch (e) {
-      return asStr
     }
   }
 }

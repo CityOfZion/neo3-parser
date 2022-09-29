@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HexNeonRpcResponseParser = exports.DefaultNeonRpcResponseParser = exports.NeonParser = void 0;
+exports.NeonParser = void 0;
 const neon_js_1 = require("@cityofzion/neon-js");
 exports.NeonParser = {
     abToHexstring(arr) {
@@ -54,21 +54,31 @@ exports.NeonParser = {
     utf8ToBase64(input) {
         return neon_js_1.u.utf82base64(input);
     },
-    parseRpcResponse(field, customParser = exports.DefaultNeonRpcResponseParser) {
+    parseRpcResponse(field, parseConfig) {
         switch (field.type) {
             case "ByteString":
-                return customParser.ByteString(field.value);
+                const rawValue = exports.NeonParser.base64ToHex(field.value);
+                if (rawValue.length === 40 && (parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.ByteStringToScriptHash)) {
+                    return `0x${exports.NeonParser.reverseHex(rawValue)}`;
+                }
+                const asStr = exports.NeonParser.hexstringToStr(rawValue);
+                try {
+                    return JSON.parse(asStr);
+                }
+                catch (e) {
+                    return asStr;
+                }
             case "Integer":
                 return parseInt(field.value);
             case "Array":
                 return field.value.map((f) => {
-                    return exports.NeonParser.parseRpcResponse(f, customParser);
+                    return exports.NeonParser.parseRpcResponse(f, parseConfig);
                 });
             case "Map":
                 const object = {};
                 field.value.forEach((f) => {
-                    let key = exports.NeonParser.parseRpcResponse(f.key, customParser);
-                    object[key] = exports.NeonParser.parseRpcResponse(f.value, customParser);
+                    let key = exports.NeonParser.parseRpcResponse(f.key, parseConfig);
+                    object[key] = exports.NeonParser.parseRpcResponse(f.value, parseConfig);
                 });
                 return object;
             default:
@@ -78,33 +88,6 @@ exports.NeonParser = {
                 catch (e) {
                     return field.value;
                 }
-        }
-    }
-};
-exports.DefaultNeonRpcResponseParser = {
-    ByteString(input) {
-        const rawValue = exports.NeonParser.base64ToHex(input);
-        const asStr = exports.NeonParser.hexstringToStr(rawValue);
-        try {
-            return JSON.parse(asStr);
-        }
-        catch (e) {
-            return asStr;
-        }
-    }
-};
-exports.HexNeonRpcResponseParser = {
-    ByteString(input) {
-        const rawValue = exports.NeonParser.base64ToHex(input);
-        if (rawValue.length === 40) {
-            return `0x${exports.NeonParser.reverseHex(rawValue)}`;
-        }
-        const asStr = exports.NeonParser.hexstringToStr(rawValue);
-        try {
-            return JSON.parse(asStr);
-        }
-        catch (e) {
-            return asStr;
         }
     }
 };
