@@ -93,3 +93,18 @@ export const DefaultNeonRpcResponseParser: RpcResponseParser = {
     }
   }
 }
+
+export const HexNeonRpcResponseParser: RpcResponseParser = {
+  ByteString(input: string): any {
+    const rawValue = NeonParser.base64ToHex(input)
+    if (rawValue.length === 40) {
+      return `0x${NeonParser.reverseHex(rawValue)}`
+    }
+    const asStr = NeonParser.hexstringToStr(rawValue)
+    try {
+      return JSON.parse(asStr)
+    } catch (e) {
+      return asStr
+    }
+  }
+}
