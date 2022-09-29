@@ -1,4 +1,4 @@
-import { Neo3Parser } from '@cityofzion/neo3-parser'
+import { Neo3Parser, RpcResponseParser } from '@cityofzion/neo3-parser'
 import { u, wallet } from '@cityofzion/neon-js'
 
 export const NeonParser: Neo3Parser = {
@@ -53,16 +53,10 @@ export const NeonParser: Neo3Parser = {
   utf8ToBase64(input: string): string {
     return u.utf82base64(input)
   },
-  parseRpcResponse(field: any): any {
+  parseRpcResponse(field: any, customParser: RpcResponseParser = DefaultNeonRpcResponseParser): any {
     switch (field.type) {
       case "ByteString":
-        const rawValue = u.base642hex(field.value)
-        const asStr = u.hexstring2str(rawValue)
-        try {
-          return JSON.parse(asStr)
-        } catch (e) {
-          return asStr
-        }
+        return customParser.ByteString(field.value)
       case "Integer":
         return parseInt(field.value)
       case "Array":
@@ -73,7 +67,7 @@ export const NeonParser: Neo3Parser = {
         const object: {
           [key: string]: any
         } = {}
-        field.value.forEach( (f: any) => {
+        field.value.forEach((f: any) => {
           let key: string = NeonParser.parseRpcResponse(f.key)
           object[key] = NeonParser.parseRpcResponse(f.value)
         })
@@ -84,6 +78,18 @@ export const NeonParser: Neo3Parser = {
         } catch (e) {
           return field.value
         }
+    }
+  }
+}
+
+export const DefaultNeonRpcResponseParser: RpcResponseParser = {
+  ByteString(input: string): any {
+    const rawValue = NeonParser.base64ToHex(input)
+    const asStr = NeonParser.hexstringToStr(rawValue)
+    try {
+      return JSON.parse(asStr)
+    } catch (e) {
+      return asStr
     }
   }
 }

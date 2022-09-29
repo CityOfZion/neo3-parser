@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NeonParser = void 0;
+exports.DefaultNeonRpcResponseParser = exports.NeonParser = void 0;
 const neon_js_1 = require("@cityofzion/neon-js");
 exports.NeonParser = {
     abToHexstring(arr) {
@@ -54,17 +54,10 @@ exports.NeonParser = {
     utf8ToBase64(input) {
         return neon_js_1.u.utf82base64(input);
     },
-    parseRpcResponse(field) {
+    parseRpcResponse(field, customParser = exports.DefaultNeonRpcResponseParser) {
         switch (field.type) {
             case "ByteString":
-                const rawValue = neon_js_1.u.base642hex(field.value);
-                const asStr = neon_js_1.u.hexstring2str(rawValue);
-                try {
-                    return JSON.parse(asStr);
-                }
-                catch (e) {
-                    return asStr;
-                }
+                return customParser.ByteString(field.value);
             case "Integer":
                 return parseInt(field.value);
             case "Array":
@@ -85,6 +78,18 @@ exports.NeonParser = {
                 catch (e) {
                     return field.value;
                 }
+        }
+    }
+};
+exports.DefaultNeonRpcResponseParser = {
+    ByteString(input) {
+        const rawValue = exports.NeonParser.base64ToHex(input);
+        const asStr = exports.NeonParser.hexstringToStr(rawValue);
+        try {
+            return JSON.parse(asStr);
+        }
+        catch (e) {
+            return asStr;
         }
     }
 };

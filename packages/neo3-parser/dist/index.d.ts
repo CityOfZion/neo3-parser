@@ -90,5 +90,8 @@ export interface Neo3Parser {
      * Formats the response from the RPC server to an easier to use format for dapp developers
      * @param input The response from the RPC server
      */
-    parseRpcResponse: (field: any) => any;
+    parseRpcResponse: (field: any, customParser?: RpcResponseParser) => any;
+}
+export interface RpcResponseParser {
+    ByteString: (input: string) => any;
 }
