@@ -61,15 +61,15 @@ export const NeonParser: Neo3Parser = {
         return parseInt(field.value)
       case "Array":
         return field.value.map( (f: any) => {
-          return NeonParser.parseRpcResponse(f)
+          return NeonParser.parseRpcResponse(f, customParser)
         })
       case "Map":
         const object: {
           [key: string]: any
         } = {}
         field.value.forEach((f: any) => {
-          let key: string = NeonParser.parseRpcResponse(f.key)
-          object[key] = NeonParser.parseRpcResponse(f.value)
+          let key: string = NeonParser.parseRpcResponse(f.key, customParser)
+          object[key] = NeonParser.parseRpcResponse(f.value, customParser)
         })
         return object
       default:

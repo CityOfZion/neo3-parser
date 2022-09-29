@@ -62,13 +62,13 @@ exports.NeonParser = {
                 return parseInt(field.value);
             case "Array":
                 return field.value.map((f) => {
-                    return exports.NeonParser.parseRpcResponse(f);
+                    return exports.NeonParser.parseRpcResponse(f, customParser);
                 });
             case "Map":
                 const object = {};
                 field.value.forEach((f) => {
-                    let key = exports.NeonParser.parseRpcResponse(f.key);
-                    object[key] = exports.NeonParser.parseRpcResponse(f.value);
+                    let key = exports.NeonParser.parseRpcResponse(f.key, customParser);
+                    object[key] = exports.NeonParser.parseRpcResponse(f.value, customParser);
                 });
                 return object;
             default:
