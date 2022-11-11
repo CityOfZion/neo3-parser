@@ -65,7 +65,7 @@ export interface Neo3Parser {
    * Converts an ascii string to a base64 string.
    * @param input
    */
-  asciiToBase64(input: string): string
+  asciiToBase64: (input: string) => string
   /**
    * Converts a base64 string to utf8.
    * @param input
