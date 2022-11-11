@@ -53,6 +53,9 @@ export const NeonParser: Neo3Parser = {
   utf8ToBase64(input: string): string {
     return u.utf82base64(input)
   },
+  asciiToBase64(input: string): string {
+    return u.HexString.fromAscii(input).toBase64()
+  },
   parseRpcResponse(field: any, parseConfig?: ParseConfig): any {
     switch (field.type) {
       case "ByteString":

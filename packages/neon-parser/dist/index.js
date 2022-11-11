@@ -54,6 +54,9 @@ exports.NeonParser = {
     utf8ToBase64(input) {
         return neon_js_1.u.utf82base64(input);
     },
+    asciiToBase64(input) {
+        return neon_js_1.u.HexString.fromAscii(input).toBase64();
+    },
     parseRpcResponse(field, parseConfig) {
         switch (field.type) {
             case "ByteString":
