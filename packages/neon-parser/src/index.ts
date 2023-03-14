@@ -1,5 +1,9 @@
-import { Neo3Parser, ParseConfig } from '@cityofzion/neo3-parser'
+import { 
+  Neo3Parser, ParseConfig, RpcResponse, 
+  ABI_TYPES, HINT_TYPES 
+} from '@cityofzion/neo3-parser/src'
 import { u, wallet } from '@cityofzion/neon-js'
+
 
 export const NeonParser: Neo3Parser = {
   abToHexstring(arr: ArrayBuffer | ArrayLike<number>): string {
@@ -56,40 +60,100 @@ export const NeonParser: Neo3Parser = {
   asciiToBase64(input: string): string {
     return u.HexString.fromAscii(input).toBase64()
   },
-  parseRpcResponse(field: any, parseConfig?: ParseConfig): any {
-    switch (field.type) {
-      case "ByteString":
-        const rawValue = NeonParser.base64ToHex(field.value)
-        if (rawValue.length === 40 && parseConfig?.ByteStringToScriptHash) {
-          return `0x${NeonParser.reverseHex(rawValue)}`
-        }
-        const asStr = NeonParser.hexstringToStr(rawValue)
-        try {
-          return JSON.parse(asStr)
-        } catch (e) {
-          return asStr
-        }
-      case "Integer":
-        return parseInt(field.value)
-      case "Array":
-        return field.value.map( (f: any) => {
-          return NeonParser.parseRpcResponse(f, parseConfig)
+  parseRpcResponse(field: RpcResponse, parseConfig?: ParseConfig): any {
+    verifyParseConfigUnion(field, parseConfig)
+
+    switch (field.type?.toUpperCase()) {
+      case "BYTESTRING":
+        return parseByteString(field, parseConfig)
+      case "INTEGER":
+        return parseInt(field.value as string)
+      case "ARRAY":
+        return (field.value as RpcResponse[]).map( (f: any) => {
+          return NeonParser.parseRpcResponse(f, parseConfig?.generic)
         })
-      case "Map":
+      case "MAP":
         const object: {
           [key: string]: any
-        } = {}
-        field.value.forEach((f: any) => {
-          let key: string = NeonParser.parseRpcResponse(f.key, parseConfig)
-          object[key] = NeonParser.parseRpcResponse(f.value, parseConfig)
+        } = {};
+
+        (field.value as RpcResponse[]).forEach((f: any) => {
+          let key: string = NeonParser.parseRpcResponse(f.key, parseConfig?.genericKey)
+          object[key] = NeonParser.parseRpcResponse(f.value, parseConfig?.genericItem)
         })
         return object
+
+      // Another method should take care of this parse
+      case "INTEROPINTERFACE":
+        return
       default:
         try {
-          return JSON.parse(field.value)
+          return JSON.parse(field.value as string)
         } catch (e) {
           return field.value
         }
     }
   }
+}
+
+function verifyParseConfigUnion(field: RpcResponse, parseConfig?: ParseConfig) {
+
+  if (parseConfig?.union){
+    const configs = parseConfig?.union.filter( (config) => {
+      return ABI_TYPES[config.type.toUpperCase()].internal.toUpperCase() === field.type.toUpperCase()
+    })
+    
+    if (configs.length > 0){
+      if (field.type.toUpperCase() === "Array".toUpperCase()){
+        parseConfig.generic = configs[0].generic
+      }else if (field.type.toUpperCase() === "Map".toUpperCase()) {
+        parseConfig.genericItem = configs[0].genericItem
+        parseConfig.genericKey = configs[0].genericKey
+      }else if (field.type.toUpperCase() === "ByteString".toUpperCase()) {
+        if (configs.length === 1){
+          Object.assign(parseConfig, configs[0])
+        } else{
+          parseConfig.type = 'String'
+        }
+      }else{
+        Object.assign(parseConfig, configs[0])
+      }
+    }
+  }
+}
+
+function parseByteString({value}: RpcResponse, parseConfig?: ParseConfig) {
+  const valueToParse = value as string
+
+  const rawValue = NeonParser.base64ToHex(valueToParse)
+
+  if (parseConfig?.type.toUpperCase() === ABI_TYPES.BYTEARRAY.name.toUpperCase()){
+    return rawValue
+  }
+
+  if (parseConfig?.type.toUpperCase() === ABI_TYPES.HASH160.name.toUpperCase()) {
+    if (rawValue.length !== 40) throw new TypeError(`${rawValue} is not a ${ABI_TYPES.HASH160.name}`)
+    
+    return parseConfig?.hint?.toUpperCase() === HINT_TYPES.SCRIPTHASHLITTLEENDING.name.toUpperCase() 
+      ? rawValue : `0x${NeonParser.reverseHex(rawValue)}`
+  }
+
+  if (parseConfig?.type.toUpperCase() === ABI_TYPES.HASH256.name.toUpperCase()) {
+    if (rawValue.length !== 64) throw new TypeError(`${rawValue} is not a ${ABI_TYPES.HASH256.name}`)
+    
+    return `0x${NeonParser.reverseHex(rawValue)}`
+  }
+
+  const stringValue = NeonParser.base64ToUtf8(valueToParse)
+  
+  if (parseConfig?.hint?.toUpperCase() === HINT_TYPES.ADDRESS.name.toUpperCase() && 
+    (
+      stringValue.length !== 34 ||  
+      (!stringValue.startsWith("N") && !stringValue.startsWith("A") ) ||
+      !stringValue.match(/^[A-HJ-NP-Za-km-z1-9]*$/) // check base58 chars
+    )
+  ){ 
+    throw new TypeError(`${valueToParse} is not an ${HINT_TYPES.ADDRESS.name}`)
+  }
+  return stringValue
 }

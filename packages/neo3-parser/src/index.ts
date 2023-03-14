@@ -95,9 +95,63 @@ export interface Neo3Parser {
    * Formats the response from the RPC server to an easier to use format for dapp developers
    * @param input The response from the RPC server
    */
-  parseRpcResponse: (field: any, parseConfig?: ParseConfig) => any
+  parseRpcResponse: (field: RpcResponse, parseConfig?: ParseConfig) => any
 }
 
 export interface ParseConfig {
-  ByteStringToScriptHash: boolean
+  type: string,
+  hint?: string,
+  generic?: ParseConfig,
+  genericKey?: ParseConfig,
+  genericItem?: ParseConfig,
+  union?: ParseConfig[],
+}
+
+export interface RpcResponse{
+  type?: string,
+  value?: string | RpcResponse[] | RpcResponse | boolean,  // Se o StorageCOntext contar entao é ?
+  key?: RpcResponse
+  sessionId?: string
+  id?: string
+  interface?: string
+}
+
+export const INTERNAL_TYPES = {
+  ARRAY: "Array",
+  BYTESTRING: "ByteString",
+  BUFFER: "Buffer",
+  INTEGER: "Integer",
+  INTEROPINTERFACE: "InteropInterface",
+  BOOLEAN: "Boolean",
+  MAP: "Map",
+  NULL: "Null",
+  POINTER: "Pointer",
+  STRUCT: "Struct",
+}
+
+export const ABI_TYPES = {
+  ANY: {name: "Any"},
+  SIGNATURE: {name: "Signature", internal: INTERNAL_TYPES.BYTESTRING},
+  BOOLEAN: {name: "Boolean", internal: INTERNAL_TYPES.BOOLEAN},
+  INTEGER: {name: "Integer", internal: INTERNAL_TYPES.INTEGER},
+  HASH160: {name: "Hash160", internal: INTERNAL_TYPES.BYTESTRING},
+  HASH256: {name: "Hash256", internal: INTERNAL_TYPES.BYTESTRING},
+  BYTEARRAY: {name: "ByteArray", internal: INTERNAL_TYPES.BYTESTRING},
+  PUBLICKEY: {name: "PublicKey", internal: INTERNAL_TYPES.BYTESTRING},
+  STRING: {name: "String", internal: INTERNAL_TYPES.BYTESTRING},
+  ARRAY: {name: "Array", internal: INTERNAL_TYPES.ARRAY},
+  MAP: {name: "Map", internal: INTERNAL_TYPES.MAP},
+  INTEROPINTERFACE: {name: "InteropInterface", internal: INTERNAL_TYPES.INTEROPINTERFACE},
+  VOID: {name: "Void", internal: INTERNAL_TYPES.NULL},
+}
+
+export const HINT_TYPES = {
+  ADDRESS: { name: "Address", abi: ABI_TYPES.STRING },
+  PUBLICKEY:  { name: "PublicKey", abi: ABI_TYPES.PUBLICKEY },
+  SCRIPTHASH: { name: "ScriptHash", abi: ABI_TYPES.HASH160 },
+  SCRIPTHASHLITTLEENDING: { name: "ScriptHashLittleEndian", abi: ABI_TYPES.HASH160 },
+  BLOCKHASH: { name: "BlockHash", abi: ABI_TYPES.HASH256 },
+  TRANSACTIONID: { name: "TransactionId", abi: ABI_TYPES.HASH256 },
+  STORAGECONTEXT: { name: "StorageContext", abi: ABI_TYPES.INTEROPINTERFACE },  
+  ITERATOR: { name: "Iterator", abi: ABI_TYPES.INTEROPINTERFACE },             
 }
