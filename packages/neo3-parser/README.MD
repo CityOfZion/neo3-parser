@@ -17,7 +17,7 @@ Visit the [main page](../../README.md) of the project.
 
 ## How to parse responses
 
-After invoking a contract you'll get the results on a stack. Use the `parseRpcResponse(field: RpcResponse, parseConfig?: ParseConfig)` function on each item to get the results parsed.
+After invoking a contract you'll get the results on a stack. Use the `parseRpcResponse(field: RpcResponse, parseConfig?: ParseConfig)` function on each result of the stack to get the results parsed.
 
 ### How to use parseConfig
 
@@ -46,19 +46,19 @@ const stackResult = [
 ]
 
 // Call parseRpcResponse on an item of the stack
-const response = Neo3Parser.parseRpcResponde(stackResult[0])
+const response = Neo3Parser.parseRpcResponse(stackResult[0])
 
 console.log(response) 
 // Expected output: "☺☻♥♦♣♠\n♫☼►◄↕‼"
 
 // You can use the `parseConfig` parameter to change how to parse the response
-const responseHash160 = Neo3Parser.parseRpcResponde(stackResult[0], { type: "Hash160"})
+const responseHash160 = Neo3Parser.parseRpcResponse(stackResult[0], { type: "Hash160"})
 
 console.log(responseHash160)
 // Expected output: "0x131211100f0e0d0c0b0a09080706050403020100"
 
 // Adding a hint might also change how it is parsed
-const responseHash160LE = Neo3Parser.parseRpcResponde(stackResult[0], { type: "Hash160", hint: "ScriptHashLittleEndian"})
+const responseHash160LE = Neo3Parser.parseRpcResponse(stackResult[0], { type: "Hash160", hint: "ScriptHashLittleEndian"})
 
 console.log(responseHash160LE)
 // Expected output: "000102030405060708090a0b0c0d0e0f10111213"
@@ -109,7 +109,7 @@ const parseConfigFromNeo3boa = {
   "hint": "ScriptHashLittleEndian"
 }
 
-const responseHash160LE = Neo3Parser.parseRpcResponde(stackResult[0], parseConfigFromNeo3boa)
+const responseHash160LE = Neo3Parser.parseRpcResponse(stackResult[0], parseConfigFromNeo3boa)
 
 console.log(responseHash160LE)
 // Expected output: "000102030405060708090a0b0c0d0e0f10111213"
