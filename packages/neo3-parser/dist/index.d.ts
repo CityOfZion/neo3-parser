@@ -95,8 +95,142 @@ export interface Neo3Parser {
      * Formats the response from the RPC server to an easier to use format for dapp developers
      * @param input The response from the RPC server
      */
-    parseRpcResponse: (field: any, parseConfig?: ParseConfig) => any;
+    parseRpcResponse: (field: RpcResponse, parseConfig?: ParseConfig) => any;
 }
 export interface ParseConfig {
-    ByteStringToScriptHash: boolean;
+    type: string;
+    hint?: string;
+    generic?: ParseConfig;
+    genericKey?: ParseConfig;
+    genericItem?: ParseConfig;
+    union?: ParseConfig[];
+    sessionId?: string;
 }
+export interface RpcResponse {
+    type?: string;
+    value: string | RpcResponse[] | RpcResponse | boolean;
+    key?: RpcResponse;
+}
+export declare const INTERNAL_TYPES: {
+    ARRAY: string;
+    BYTESTRING: string;
+    BUFFER: string;
+    INTEGER: string;
+    INTEROPINTERFACE: string;
+    BOOLEAN: string;
+    MAP: string;
+    NULL: string;
+    POINTER: string;
+    STRUCT: string;
+};
+export declare const ABI_TYPES: {
+    ANY: {
+        name: string;
+    };
+    SIGNATURE: {
+        name: string;
+        internal: string;
+    };
+    BOOLEAN: {
+        name: string;
+        internal: string;
+    };
+    INTEGER: {
+        name: string;
+        internal: string;
+    };
+    HASH160: {
+        name: string;
+        internal: string;
+    };
+    HASH256: {
+        name: string;
+        internal: string;
+    };
+    BYTEARRAY: {
+        name: string;
+        internal: string;
+    };
+    PUBLICKEY: {
+        name: string;
+        internal: string;
+    };
+    STRING: {
+        name: string;
+        internal: string;
+    };
+    ARRAY: {
+        name: string;
+        internal: string;
+    };
+    MAP: {
+        name: string;
+        internal: string;
+    };
+    INTEROPINTERFACE: {
+        name: string;
+        internal: string;
+    };
+    VOID: {
+        name: string;
+        internal: string;
+    };
+};
+export declare const EXTENDED_ABI_TYPES: {
+    ADDRESS: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+    PUBLICKEY: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+    SCRIPTHASH: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+    SCRIPTHASHLITTLEENDING: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+    BLOCKHASH: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+    TRANSACTIONID: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+    STORAGECONTEXT: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+    ITERATOR: {
+        name: string;
+        abi: {
+            name: string;
+            internal: string;
+        };
+    };
+};
