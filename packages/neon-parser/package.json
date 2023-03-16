@@ -1,6 +1,6 @@
 {
   "name": "@cityofzion/neon-parser",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
     "test": "ts-mocha src/**/*.spec.ts"
   },
   "dependencies": {
-    "@cityofzion/neo3-parser": "workspace:*",
+    "@cityofzion/neo3-parser": "1.6.0",
     "@cityofzion/neon-js": "^5.3.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EXTENDED_ABI_TYPES = exports.ABI_TYPES = exports.INTERNAL_TYPES = void 0;
+exports.HINT_TYPES = exports.ABI_TYPES = exports.INTERNAL_TYPES = void 0;
 exports.INTERNAL_TYPES = {
     ARRAY: "Array",
     BYTESTRING: "ByteString",
@@ -28,7 +28,7 @@ exports.ABI_TYPES = {
     INTEROPINTERFACE: { name: "InteropInterface", internal: exports.INTERNAL_TYPES.INTEROPINTERFACE },
     VOID: { name: "Void", internal: exports.INTERNAL_TYPES.NULL },
 };
-exports.EXTENDED_ABI_TYPES = {
+exports.HINT_TYPES = {
     ADDRESS: { name: "Address", abi: exports.ABI_TYPES.STRING },
     PUBLICKEY: { name: "PublicKey", abi: exports.ABI_TYPES.PUBLICKEY },
     SCRIPTHASH: { name: "ScriptHash", abi: exports.ABI_TYPES.HASH160 },

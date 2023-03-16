@@ -104,12 +104,14 @@ export interface ParseConfig {
     genericKey?: ParseConfig;
     genericItem?: ParseConfig;
     union?: ParseConfig[];
-    sessionId?: string;
 }
 export interface RpcResponse {
     type?: string;
-    value: string | RpcResponse[] | RpcResponse | boolean;
+    value?: string | RpcResponse[] | RpcResponse | boolean;
     key?: RpcResponse;
+    sessionId?: string;
+    id?: string;
+    interface?: string;
 }
 export declare const INTERNAL_TYPES: {
     ARRAY: string;
@@ -176,7 +178,7 @@ export declare const ABI_TYPES: {
         internal: string;
     };
 };
-export declare const EXTENDED_ABI_TYPES: {
+export declare const HINT_TYPES: {
     ADDRESS: {
         name: string;
         abi: {

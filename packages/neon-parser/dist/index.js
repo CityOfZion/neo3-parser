@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeonParser = void 0;
-const neo3_parser_1 = require("@cityofzion/neo3-parser");
+const src_1 = require("@cityofzion/neo3-parser/src");
 const neon_js_1 = require("@cityofzion/neon-js");
 exports.NeonParser = {
     abToHexstring(arr) {
@@ -59,22 +59,27 @@ exports.NeonParser = {
         return neon_js_1.u.HexString.fromAscii(input).toBase64();
     },
     parseRpcResponse(field, parseConfig) {
-        switch (field.type) {
-            case "ByteString":
+        var _a;
+        verifyParseConfigUnion(field, parseConfig);
+        switch ((_a = field.type) === null || _a === void 0 ? void 0 : _a.toUpperCase()) {
+            case "BYTESTRING":
                 return parseByteString(field, parseConfig);
-            case "Integer":
+            case "INTEGER":
                 return parseInt(field.value);
-            case "Array":
+            case "ARRAY":
                 return field.value.map((f) => {
-                    return exports.NeonParser.parseRpcResponse(f, parseConfig.generic);
+                    return exports.NeonParser.parseRpcResponse(f, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.generic);
                 });
-            case "Map":
+            case "MAP":
                 const object = {};
                 field.value.forEach((f) => {
-                    let key = exports.NeonParser.parseRpcResponse(f.key, parseConfig.genericKey);
-                    object[key] = exports.NeonParser.parseRpcResponse(f.value, parseConfig.genericItem);
+                    let key = exports.NeonParser.parseRpcResponse(f.key, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.genericKey);
+                    object[key] = exports.NeonParser.parseRpcResponse(f.value, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.genericItem);
                 });
                 return object;
+            // Another method should take care of this parse
+            case "INTEROPINTERFACE":
+                return;
             default:
                 try {
                     return JSON.parse(field.value);
@@ -85,38 +90,59 @@ exports.NeonParser = {
         }
     }
 };
-function parseByteString({ value }, parseConfig) {
-    const valueToParse = value;
-    if (parseConfig.union) {
-        for (const config of parseConfig.union) {
-            if (neo3_parser_1.ABI_TYPES[config.type.toUpperCase()].internal === neo3_parser_1.INTERNAL_TYPES.BYTESTRING) {
-                parseConfig = config;
-                break;
+function verifyParseConfigUnion(field, parseConfig) {
+    if (parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.union) {
+        const configs = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.union.filter((config) => {
+            return src_1.ABI_TYPES[config.type.toUpperCase()].internal.toUpperCase() === field.type.toUpperCase();
+        });
+        if (configs.length > 0) {
+            if (field.type.toUpperCase() === "Array".toUpperCase()) {
+                parseConfig.generic = configs[0].generic;
+            }
+            else if (field.type.toUpperCase() === "Map".toUpperCase()) {
+                parseConfig.genericItem = configs[0].genericItem;
+                parseConfig.genericKey = configs[0].genericKey;
+            }
+            else if (field.type.toUpperCase() === "ByteString".toUpperCase()) {
+                if (configs.length === 1) {
+                    Object.assign(parseConfig, configs[0]);
+                }
+                else {
+                    parseConfig.type = 'String';
+                }
+            }
+            else {
+                Object.assign(parseConfig, configs[0]);
             }
         }
     }
-    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type) === neo3_parser_1.ABI_TYPES.STRING.name) {
-        const stringValue = exports.NeonParser.base64ToUtf8(valueToParse);
-        if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === neo3_parser_1.EXTENDED_ABI_TYPES.ADDRESS.name &&
-            (stringValue.length !== 34 ||
-                (!stringValue.startsWith("N") && !stringValue.startsWith("A")))
-        // veirfica se é base58 depois eua cho
-        ) {
-            throw new TypeError(`${valueToParse} is not an ${neo3_parser_1.EXTENDED_ABI_TYPES.ADDRESS.name}`);
-        }
-        return stringValue;
-    }
+}
+function parseByteString({ value }, parseConfig) {
+    var _a, _b;
+    const valueToParse = value;
     const rawValue = exports.NeonParser.base64ToHex(valueToParse);
-    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type) === neo3_parser_1.ABI_TYPES.HASH160.name) {
-        if (rawValue.length !== 40)
-            throw new TypeError(`${rawValue} is not a ${neo3_parser_1.ABI_TYPES.HASH160}`);
-        return (parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === neo3_parser_1.EXTENDED_ABI_TYPES.SCRIPTHASHLITTLEENDING.name ? rawValue : `0x${exports.NeonParser.reverseHex(rawValue)}`;
+    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === src_1.ABI_TYPES.BYTEARRAY.name.toUpperCase()) {
+        return rawValue;
     }
-    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type) === neo3_parser_1.ABI_TYPES.HASH256.name) {
+    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === src_1.ABI_TYPES.HASH160.name.toUpperCase()) {
+        if (rawValue.length !== 40)
+            throw new TypeError(`${rawValue} is not a ${src_1.ABI_TYPES.HASH160.name}`);
+        return ((_a = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _a === void 0 ? void 0 : _a.toUpperCase()) === src_1.HINT_TYPES.SCRIPTHASHLITTLEENDING.name.toUpperCase()
+            ? rawValue : `0x${exports.NeonParser.reverseHex(rawValue)}`;
+    }
+    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === src_1.ABI_TYPES.HASH256.name.toUpperCase()) {
         if (rawValue.length !== 64)
-            throw new TypeError(`${rawValue} is not a ${neo3_parser_1.ABI_TYPES.HASH256}`);
+            throw new TypeError(`${rawValue} is not a ${src_1.ABI_TYPES.HASH256.name}`);
         return `0x${exports.NeonParser.reverseHex(rawValue)}`;
     }
-    return rawValue;
+    const stringValue = exports.NeonParser.base64ToUtf8(valueToParse);
+    if (((_b = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _b === void 0 ? void 0 : _b.toUpperCase()) === src_1.HINT_TYPES.ADDRESS.name.toUpperCase() &&
+        (stringValue.length !== 34 ||
+            (!stringValue.startsWith("N") && !stringValue.startsWith("A")) ||
+            !stringValue.match(/^[A-HJ-NP-Za-km-z1-9]*$/) // check base58 chars
+        )) {
+        throw new TypeError(`${valueToParse} is not an ${src_1.HINT_TYPES.ADDRESS.name}`);
+    }
+    return stringValue;
 }
 //# sourceMappingURL=index.js.map
