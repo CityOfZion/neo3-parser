@@ -1,7 +1,7 @@
-import { 
-  Neo3Parser, ParseConfig, RpcResponse, 
-  ABI_TYPES, HINT_TYPES 
-} from '@cityofzion/neo3-parser/src'
+import {
+  Neo3Parser, ParseConfig, RpcResponse,
+  ABI_TYPES, HINT_TYPES
+} from '@cityofzion/neo3-parser'
 import { u, wallet } from '@cityofzion/neon-js'
 
 
@@ -102,7 +102,7 @@ function verifyParseConfigUnion(field: RpcResponse, parseConfig?: ParseConfig) {
     const configs = parseConfig?.union.filter( (config) => {
       return ABI_TYPES[config.type.toUpperCase()].internal.toUpperCase() === field.type.toUpperCase()
     })
-    
+
     if (configs.length > 0){
       if (field.type.toUpperCase() === "Array".toUpperCase()){
         parseConfig.generic = configs[0].generic
@@ -133,26 +133,26 @@ function parseByteString({value}: RpcResponse, parseConfig?: ParseConfig) {
 
   if (parseConfig?.type.toUpperCase() === ABI_TYPES.HASH160.name.toUpperCase()) {
     if (rawValue.length !== 40) throw new TypeError(`${rawValue} is not a ${ABI_TYPES.HASH160.name}`)
-    
-    return parseConfig?.hint?.toUpperCase() === HINT_TYPES.SCRIPTHASHLITTLEENDING.name.toUpperCase() 
+
+    return parseConfig?.hint?.toUpperCase() === HINT_TYPES.SCRIPTHASHLITTLEENDING.name.toUpperCase()
       ? rawValue : `0x${NeonParser.reverseHex(rawValue)}`
   }
 
   if (parseConfig?.type.toUpperCase() === ABI_TYPES.HASH256.name.toUpperCase()) {
     if (rawValue.length !== 64) throw new TypeError(`${rawValue} is not a ${ABI_TYPES.HASH256.name}`)
-    
+
     return `0x${NeonParser.reverseHex(rawValue)}`
   }
 
   const stringValue = NeonParser.base64ToUtf8(valueToParse)
-  
-  if (parseConfig?.hint?.toUpperCase() === HINT_TYPES.ADDRESS.name.toUpperCase() && 
+
+  if (parseConfig?.hint?.toUpperCase() === HINT_TYPES.ADDRESS.name.toUpperCase() &&
     (
-      stringValue.length !== 34 ||  
+      stringValue.length !== 34 ||
       (!stringValue.startsWith("N") && !stringValue.startsWith("A") ) ||
       !stringValue.match(/^[A-HJ-NP-Za-km-z1-9]*$/) // check base58 chars
     )
-  ){ 
+  ){
     throw new TypeError(`${valueToParse} is not an ${HINT_TYPES.ADDRESS.name}`)
   }
   return stringValue

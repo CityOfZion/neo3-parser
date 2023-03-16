@@ -15,7 +15,7 @@ importers:
 
   ../../packages/neon-parser:
     specifiers:
-      '@cityofzion/neo3-parser': workspace:*
+      '@cityofzion/neo3-parser': 1.6.0
       '@cityofzion/neon-js': ^5.3.0
       '@types/mocha': ^10.0.1
       '@types/node': ^18.14.6
@@ -24,7 +24,7 @@ importers:
       ts-mocha: ^10.0.0
       typescript: ^4.3.2
     dependencies:
-      '@cityofzion/neo3-parser': link:../neo3-parser
+      '@cityofzion/neo3-parser': 1.6.0
       '@cityofzion/neon-js': 5.3.0
     devDependencies:
       '@types/mocha': 10.0.1
@@ -35,6 +35,10 @@ importers:
       typescript: 4.8.3
 
 packages:
+
+  /@cityofzion/neo3-parser/1.6.0:
+    resolution: {integrity: sha512-K+j3qaZEuq1cxit+fFziwAAc0hMQTdACbtllU1HUKJZ89dw7z/FY3Bmg12cyZ8tXuiktCloXvUT0Mg/IzoYqdg==}
+    dev: false
 
   /@cityofzion/neon-api/5.2.2_@cityofzion+neon-core@5.3.0:
     resolution: {integrity: sha512-zNaGI+0C3r/w0olV6cpbdl1OarvX/Qen8bnEO3Xlqybc8uswu0AoL/mhfjXPFd75UkWmQTC7JCziKQULTfLblg==}

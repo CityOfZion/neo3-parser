@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeonParser = void 0;
-const src_1 = require("@cityofzion/neo3-parser/src");
+const neo3_parser_1 = require("@cityofzion/neo3-parser");
 const neon_js_1 = require("@cityofzion/neon-js");
 exports.NeonParser = {
     abToHexstring(arr) {
@@ -93,7 +93,7 @@ exports.NeonParser = {
 function verifyParseConfigUnion(field, parseConfig) {
     if (parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.union) {
         const configs = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.union.filter((config) => {
-            return src_1.ABI_TYPES[config.type.toUpperCase()].internal.toUpperCase() === field.type.toUpperCase();
+            return neo3_parser_1.ABI_TYPES[config.type.toUpperCase()].internal.toUpperCase() === field.type.toUpperCase();
         });
         if (configs.length > 0) {
             if (field.type.toUpperCase() === "Array".toUpperCase()) {
@@ -121,27 +121,27 @@ function parseByteString({ value }, parseConfig) {
     var _a, _b;
     const valueToParse = value;
     const rawValue = exports.NeonParser.base64ToHex(valueToParse);
-    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === src_1.ABI_TYPES.BYTEARRAY.name.toUpperCase()) {
+    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === neo3_parser_1.ABI_TYPES.BYTEARRAY.name.toUpperCase()) {
         return rawValue;
     }
-    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === src_1.ABI_TYPES.HASH160.name.toUpperCase()) {
+    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === neo3_parser_1.ABI_TYPES.HASH160.name.toUpperCase()) {
         if (rawValue.length !== 40)
-            throw new TypeError(`${rawValue} is not a ${src_1.ABI_TYPES.HASH160.name}`);
-        return ((_a = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _a === void 0 ? void 0 : _a.toUpperCase()) === src_1.HINT_TYPES.SCRIPTHASHLITTLEENDING.name.toUpperCase()
+            throw new TypeError(`${rawValue} is not a ${neo3_parser_1.ABI_TYPES.HASH160.name}`);
+        return ((_a = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _a === void 0 ? void 0 : _a.toUpperCase()) === neo3_parser_1.HINT_TYPES.SCRIPTHASHLITTLEENDING.name.toUpperCase()
             ? rawValue : `0x${exports.NeonParser.reverseHex(rawValue)}`;
     }
-    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === src_1.ABI_TYPES.HASH256.name.toUpperCase()) {
+    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === neo3_parser_1.ABI_TYPES.HASH256.name.toUpperCase()) {
         if (rawValue.length !== 64)
-            throw new TypeError(`${rawValue} is not a ${src_1.ABI_TYPES.HASH256.name}`);
+            throw new TypeError(`${rawValue} is not a ${neo3_parser_1.ABI_TYPES.HASH256.name}`);
         return `0x${exports.NeonParser.reverseHex(rawValue)}`;
     }
     const stringValue = exports.NeonParser.base64ToUtf8(valueToParse);
-    if (((_b = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _b === void 0 ? void 0 : _b.toUpperCase()) === src_1.HINT_TYPES.ADDRESS.name.toUpperCase() &&
+    if (((_b = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _b === void 0 ? void 0 : _b.toUpperCase()) === neo3_parser_1.HINT_TYPES.ADDRESS.name.toUpperCase() &&
         (stringValue.length !== 34 ||
             (!stringValue.startsWith("N") && !stringValue.startsWith("A")) ||
             !stringValue.match(/^[A-HJ-NP-Za-km-z1-9]*$/) // check base58 chars
         )) {
-        throw new TypeError(`${valueToParse} is not an ${src_1.HINT_TYPES.ADDRESS.name}`);
+        throw new TypeError(`${valueToParse} is not an ${neo3_parser_1.HINT_TYPES.ADDRESS.name}`);
     }
     return stringValue;
 }
