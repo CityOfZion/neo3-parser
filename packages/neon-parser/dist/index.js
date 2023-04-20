@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeonParser = void 0;
 const neo3_parser_1 = require("@cityofzion/neo3-parser");
 const neon_js_1 = require("@cityofzion/neon-js");
-exports.NeonParser = {
+const NeonParser = {
     abToHexstring(arr) {
         return neon_js_1.u.ab2hexstring(arr);
     },
@@ -68,13 +68,13 @@ exports.NeonParser = {
                 return parseInt(field.value);
             case "ARRAY":
                 return field.value.map((f) => {
-                    return exports.NeonParser.parseRpcResponse(f, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.generic);
+                    return NeonParser.parseRpcResponse(f, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.generic);
                 });
             case "MAP":
                 const object = {};
                 field.value.forEach((f) => {
-                    let key = exports.NeonParser.parseRpcResponse(f.key, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.genericKey);
-                    object[key] = exports.NeonParser.parseRpcResponse(f.value, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.genericItem);
+                    let key = NeonParser.parseRpcResponse(f.key, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.genericKey);
+                    object[key] = NeonParser.parseRpcResponse(f.value, parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.genericItem);
                 });
                 return object;
             // Another method should take care of this parse
@@ -90,6 +90,7 @@ exports.NeonParser = {
         }
     }
 };
+exports.NeonParser = NeonParser;
 function verifyParseConfigUnion(field, parseConfig) {
     if (parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.union) {
         const configs = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.union.filter((config) => {
@@ -120,7 +121,7 @@ function verifyParseConfigUnion(field, parseConfig) {
 function parseByteString({ value }, parseConfig) {
     var _a, _b;
     const valueToParse = value;
-    const rawValue = exports.NeonParser.base64ToHex(valueToParse);
+    const rawValue = NeonParser.base64ToHex(valueToParse);
     if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === neo3_parser_1.ABI_TYPES.BYTEARRAY.name.toUpperCase()) {
         return rawValue;
     }
@@ -128,14 +129,14 @@ function parseByteString({ value }, parseConfig) {
         if (rawValue.length !== 40)
             throw new TypeError(`${rawValue} is not a ${neo3_parser_1.ABI_TYPES.HASH160.name}`);
         return ((_a = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _a === void 0 ? void 0 : _a.toUpperCase()) === neo3_parser_1.HINT_TYPES.SCRIPTHASHLITTLEENDING.name.toUpperCase()
-            ? rawValue : `0x${exports.NeonParser.reverseHex(rawValue)}`;
+            ? rawValue : `0x${NeonParser.reverseHex(rawValue)}`;
     }
     if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type.toUpperCase()) === neo3_parser_1.ABI_TYPES.HASH256.name.toUpperCase()) {
         if (rawValue.length !== 64)
             throw new TypeError(`${rawValue} is not a ${neo3_parser_1.ABI_TYPES.HASH256.name}`);
-        return `0x${exports.NeonParser.reverseHex(rawValue)}`;
+        return `0x${NeonParser.reverseHex(rawValue)}`;
     }
-    const stringValue = exports.NeonParser.base64ToUtf8(valueToParse);
+    const stringValue = NeonParser.base64ToUtf8(valueToParse);
     if (((_b = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _b === void 0 ? void 0 : _b.toUpperCase()) === neo3_parser_1.HINT_TYPES.ADDRESS.name.toUpperCase() &&
         (stringValue.length !== 34 ||
             (!stringValue.startsWith("N") && !stringValue.startsWith("A")) ||

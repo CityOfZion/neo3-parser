@@ -5,7 +5,7 @@ import {
 import { u, wallet } from '@cityofzion/neon-js'
 
 
-export const NeonParser: Neo3Parser = {
+const NeonParser: Neo3Parser = {
   abToHexstring(arr: ArrayBuffer | ArrayLike<number>): string {
     return u.ab2hexstring(arr)
   },
@@ -157,3 +157,5 @@ function parseByteString({value}: RpcResponse, parseConfig?: ParseConfig) {
   }
   return stringValue
 }
+
+export { NeonParser }
