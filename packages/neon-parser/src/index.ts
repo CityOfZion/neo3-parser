@@ -144,7 +144,13 @@ function parseByteString({value}: RpcResponse, parseConfig?: ParseConfig) {
     return `0x${NeonParser.reverseHex(rawValue)}`
   }
 
-  const stringValue = NeonParser.base64ToUtf8(valueToParse)
+  let stringValue
+
+  try {
+    stringValue = NeonParser.base64ToUtf8(valueToParse)
+  } catch (e) {
+    return valueToParse
+  }
 
   if (parseConfig?.hint?.toUpperCase() === HINT_TYPES.ADDRESS.name.toUpperCase() &&
     (

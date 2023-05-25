@@ -475,4 +475,35 @@ describe("RPC Parser Tests", function () {
     })
     assert.deepEqual(array, ['abc', { neon: '706172736572', unit: '74657374' }, 'def'])
   })
+
+  it("Parse raw when UTF8 parsing fails", async () => {
+    const rpcResponse = {
+      "type": "Map",
+      "value": [
+        {
+          "key": {
+            "type": "ByteString",
+            "value": "bmFtZQ=="
+          },
+          "value": {
+            "type": "ByteString",
+            "value": "TElaQVJE"
+          }
+        }, {
+          "key": {
+            "type": "ByteString",
+            "value": "c2VlZA=="
+          },
+          "value": {
+            "type": "ByteString",
+            "value": "dphNnS0kGxelyR4Q8ntrbA=="
+          }
+        }
+      ]
+    }
+
+    const parsed = NeonParser.parseRpcResponse(rpcResponse)
+    assert.deepEqual(parsed, { name: 'LIZARD', seed: 'dphNnS0kGxelyR4Q8ntrbA==' })
+
+  })
 })
