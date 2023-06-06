@@ -426,5 +426,33 @@ const assert = require("assert");
         });
         assert.deepEqual(array, ['abc', { neon: '706172736572', unit: '74657374' }, 'def']);
     }));
+    (0, mocha_1.it)("Parse raw when UTF8 parsing fails", () => __awaiter(this, void 0, void 0, function* () {
+        const rpcResponse = {
+            "type": "Map",
+            "value": [
+                {
+                    "key": {
+                        "type": "ByteString",
+                        "value": "bmFtZQ=="
+                    },
+                    "value": {
+                        "type": "ByteString",
+                        "value": "TElaQVJE"
+                    }
+                }, {
+                    "key": {
+                        "type": "ByteString",
+                        "value": "c2VlZA=="
+                    },
+                    "value": {
+                        "type": "ByteString",
+                        "value": "dphNnS0kGxelyR4Q8ntrbA=="
+                    }
+                }
+            ]
+        };
+        const parsed = _1.NeonParser.parseRpcResponse(rpcResponse);
+        assert.deepEqual(parsed, { name: 'LIZARD', seed: 'dphNnS0kGxelyR4Q8ntrbA==' });
+    }));
 });
 //# sourceMappingURL=index.spec.js.map
