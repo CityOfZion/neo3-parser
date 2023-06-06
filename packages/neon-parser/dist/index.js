@@ -136,7 +136,13 @@ function parseByteString({ value }, parseConfig) {
             throw new TypeError(`${rawValue} is not a ${neo3_parser_1.ABI_TYPES.HASH256.name}`);
         return `0x${NeonParser.reverseHex(rawValue)}`;
     }
-    const stringValue = NeonParser.base64ToUtf8(valueToParse);
+    let stringValue;
+    try {
+        stringValue = NeonParser.base64ToUtf8(valueToParse);
+    }
+    catch (e) {
+        return valueToParse;
+    }
     if (((_b = parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.hint) === null || _b === void 0 ? void 0 : _b.toUpperCase()) === neo3_parser_1.HINT_TYPES.ADDRESS.name.toUpperCase() &&
         (stringValue.length !== 34 ||
             (!stringValue.startsWith("N") && !stringValue.startsWith("A")) ||

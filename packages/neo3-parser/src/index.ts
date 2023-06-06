@@ -109,7 +109,7 @@ export interface ParseConfig {
 
 export interface RpcResponse{
   type?: string,
-  value?: string | RpcResponse[] | RpcResponse | boolean,  // Se o StorageCOntext contar entao é ?
+  value?: string | RpcResponse[] | RpcResponse | boolean | number,
   key?: RpcResponse
   sessionId?: string
   id?: string
