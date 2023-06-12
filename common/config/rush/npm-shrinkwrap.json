@@ -10,43 +10,31 @@
       "integrity": "sha512-FHjdq2RnZLK37Hpd71yhVMkmbhl/iyPrmmAiEKb4mf5/rLtbNaKEEEJsxRkSNasio9+14cd7+BecIZ/35L1Sbg=="
     },
     "@cityofzion/neon-core": {
-      "version": "5.4.0",
-      "resolved": "https://registry.npmjs.org/@cityofzion/neon-core/-/neon-core-5.4.0.tgz",
-      "integrity": "sha512-m5B0X71KXDY1WJPMu9oM7lyKp0b5qkLaLyYC+68LgV7/f0wlnA3BQ/40rYutb2b5p+NKlEElm3IRPbdA3INcrA==",
+      "version": "5.3.0",
+      "resolved": "https://registry.npmjs.org/@cityofzion/neon-core/-/neon-core-5.3.0.tgz",
+      "integrity": "sha512-iOHY7rFuDZavH87klFIxOYpu3PnPm6pS1xY7qhkFrRtcuTqRBMzhoZstE70XLDh01ujC5y2+gXvgz4OOpzgdXQ==",
       "requires": {
-        "bn.js": "5.2.1",
+        "abort-controller": "3.0.0",
+        "bn.js": "5.2.0",
         "bs58": "5.0.0",
         "buffer": "6.0.3",
         "cross-fetch": "^3.1.5",
         "crypto-js": "4.1.1",
         "elliptic": "6.5.4",
-        "ethereum-cryptography": "2.0.0",
         "lodash": "4.17.21",
-        "loglevel": "1.8.1",
-        "loglevel-plugin-prefix": "0.8.4"
+        "loglevel": "1.8.0",
+        "loglevel-plugin-prefix": "0.8.4",
+        "scrypt-js": "3.0.1"
       }
     },
     "@cityofzion/neon-js": {
-      "version": "5.4.0",
-      "resolved": "https://registry.npmjs.org/@cityofzion/neon-js/-/neon-js-5.4.0.tgz",
-      "integrity": "sha512-PeK5F4xSQyiqkrq/0TvBUl08wdim4ZPVD+XrUUNCIDuyJGeFkaleKlVsSqR5ZY2kofLNpdHsgXXMjiu/HrEdzQ==",
+      "version": "5.3.0",
+      "resolved": "https://registry.npmjs.org/@cityofzion/neon-js/-/neon-js-5.3.0.tgz",
+      "integrity": "sha512-mtKBtYJoTJjJFnGw6Lrlo0OU2XGfPR4w71XIFfDfmoroadbRrZdVDn8KLhuJRXJP+atYJB3f0DmW6e6Ptp0M6g==",
       "requires": {
-        "@cityofzion/neon-api": "^5.4.0",
-        "@cityofzion/neon-core": "^5.4.0"
+        "@cityofzion/neon-api": "^5.2.2",
+        "@cityofzion/neon-core": "^5.3.0"
       }
-    },
-    "@noble/curves": {
-      "version": "1.0.0",
-      "resolved": "https://registry.npmjs.org/@noble/curves/-/curves-1.0.0.tgz",
-      "integrity": "sha512-2upgEu0iLiDVDZkNLeFV2+ht0BAVgQnEmCk6JsOch9Rp8xfkMCbvbAZlA2pBHQc73dbl+vFOXfqkf4uemdn0bw==",
-      "requires": {
-        "@noble/hashes": "1.3.0"
-      }
-    },
-    "@noble/hashes": {
-      "version": "1.3.0",
-      "resolved": "https://registry.npmjs.org/@noble/hashes/-/hashes-1.3.0.tgz",
-      "integrity": "sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg=="
     },
     "@rush-temp/neo3-parser": {
       "version": "file:projects/neo3-parser.tgz",
@@ -58,39 +46,16 @@
     },
     "@rush-temp/neon-parser": {
       "version": "file:projects/neon-parser.tgz",
-      "integrity": "sha512-/o+ilmgzFJRC2R9NJpjpIq6eW62n45Opvox4AOp0zibHL6jrCoQ2338e8FXBYDcG2F1x8LMi7ugLjx0tphJxqg==",
+      "integrity": "sha512-MArqC+VUffdoeaSXAVoulU3zIEch6iRryzT36hdTal/oxWJfe32RfFiJe32WPMTxdp2rqWjf5Z+dCY7KOBOkbQ==",
       "requires": {
-        "@cityofzion/neon-js": "^5.3.0",
+        "@cityofzion/neon-core": "5.3.0",
+        "@cityofzion/neon-js": "5.3.0",
         "@types/mocha": "^10.0.1",
         "@types/node": "^18.14.6",
         "assert": "^2.0.0",
         "mocha": "^10.0.0",
         "ts-mocha": "^10.0.0",
         "typescript": "^4.3.2"
-      }
-    },
-    "@scure/base": {
-      "version": "1.1.1",
-      "resolved": "https://registry.npmjs.org/@scure/base/-/base-1.1.1.tgz",
-      "integrity": "sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA=="
-    },
-    "@scure/bip32": {
-      "version": "1.3.0",
-      "resolved": "https://registry.npmjs.org/@scure/bip32/-/bip32-1.3.0.tgz",
-      "integrity": "sha512-bcKpo1oj54hGholplGLpqPHRbIsnbixFtc06nwuNM5/dwSXOq/AAYoIBRsBmnZJSdfeNW5rnff7NTAz3ZCqR9Q==",
-      "requires": {
-        "@noble/curves": "~1.0.0",
-        "@noble/hashes": "~1.3.0",
-        "@scure/base": "~1.1.0"
-      }
-    },
-    "@scure/bip39": {
-      "version": "1.2.0",
-      "resolved": "https://registry.npmjs.org/@scure/bip39/-/bip39-1.2.0.tgz",
-      "integrity": "sha512-SX/uKq52cuxm4YFXWFaVByaSHJh2w3BnokVSeUJVCv6K7WulT9u2BuNRBhuFl8vAuYnzx9bEu9WgpcNYTrYieg==",
-      "requires": {
-        "@noble/hashes": "~1.3.0",
-        "@scure/base": "~1.1.0"
       }
     },
     "@types/json5": {
@@ -108,6 +73,14 @@
       "version": "18.16.17",
       "resolved": "https://registry.npmjs.org/@types/node/-/node-18.16.17.tgz",
       "integrity": "sha512-QAkjjRA1N7gPJeAP4WLXZtYv6+eMXFNviqktCDt4GLcmCugMr5BcRHfkOjCQzvCsnMp+L79a54zBkbw356xv9Q=="
+    },
+    "abort-controller": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/abort-controller/-/abort-controller-3.0.0.tgz",
+      "integrity": "sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==",
+      "requires": {
+        "event-target-shim": "^5.0.0"
+      }
     },
     "ansi-colors": {
       "version": "4.1.1",
@@ -188,9 +161,9 @@
       "integrity": "sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA=="
     },
     "bn.js": {
-      "version": "5.2.1",
-      "resolved": "https://registry.npmjs.org/bn.js/-/bn.js-5.2.1.tgz",
-      "integrity": "sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ=="
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/bn.js/-/bn.js-5.2.0.tgz",
+      "integrity": "sha512-D7iWRBvnZE8ecXiLj/9wbxH7Tk79fAh8IHaTNq1RWRixsS02W+5qS+iE9yq6RYl0asXx5tw0bLhmT5pIfbSquw=="
     },
     "brace-expansion": {
       "version": "2.0.1",
@@ -404,16 +377,10 @@
       "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz",
       "integrity": "sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA=="
     },
-    "ethereum-cryptography": {
-      "version": "2.0.0",
-      "resolved": "https://registry.npmjs.org/ethereum-cryptography/-/ethereum-cryptography-2.0.0.tgz",
-      "integrity": "sha512-g25m4EtfQGjstWgVE1aIz7XYYjf3kH5kG17ULWVB5dH6uLahsoltOhACzSxyDV+fhn4gbR4xRrOXGe6r2uh4Bg==",
-      "requires": {
-        "@noble/curves": "1.0.0",
-        "@noble/hashes": "1.3.0",
-        "@scure/bip32": "1.3.0",
-        "@scure/bip39": "1.2.0"
-      }
+    "event-target-shim": {
+      "version": "5.0.1",
+      "resolved": "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz",
+      "integrity": "sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ=="
     },
     "fill-range": {
       "version": "7.0.1",
@@ -736,9 +703,9 @@
       }
     },
     "loglevel": {
-      "version": "1.8.1",
-      "resolved": "https://registry.npmjs.org/loglevel/-/loglevel-1.8.1.tgz",
-      "integrity": "sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg=="
+      "version": "1.8.0",
+      "resolved": "https://registry.npmjs.org/loglevel/-/loglevel-1.8.0.tgz",
+      "integrity": "sha512-G6A/nJLRgWOuuwdNuA6koovfEV1YpqqAG4pRUlFaz3jj2QNZ8M4vBqnVA+HBTmU/AMNUtlOsMmSpF6NyOjztbA=="
     },
     "loglevel-plugin-prefix": {
       "version": "0.8.4",
@@ -930,6 +897,11 @@
       "version": "5.2.1",
       "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz",
       "integrity": "sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ=="
+    },
+    "scrypt-js": {
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/scrypt-js/-/scrypt-js-3.0.1.tgz",
+      "integrity": "sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA=="
     },
     "serialize-javascript": {
       "version": "6.0.0",

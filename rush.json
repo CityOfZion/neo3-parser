@@ -3,19 +3,11 @@
   "rushVersion": "5.75.0",
   "npmVersion": "6.14.15",
   "nodeSupportedVersionRange": ">=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0",
-  "gitPolicy": {},
   "repository": {
     "url": "https://github.com/cityofzion/neo3-parser",
     "defaultBranch": "master",
     "defaultRemote": "origin"
   },
-  "eventHooks": {
-    "preRushInstall": [],
-    "postRushInstall": [],
-    "preRushBuild": [],
-    "postRushBuild": []
-  },
-  "variants": [],
   "projects": [
     {
       "packageName": "@cityofzion/neo3-parser",
