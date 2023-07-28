@@ -21,7 +21,7 @@ const assert = require("assert");
         assert.equal(_1.NeonParser.accountInputToScripthash("NhGomBpYnKXArr55nHRQ5rzy79TwKVXZbr"), "857a247939db5c7cd3a7bb14791280c09e824bea");
     }));
 });
-mocha_1.describe.only("RPC Response Parser Tests", function () {
+(0, mocha_1.describe)("RPC Response Parser Tests", function () {
     (0, mocha_1.it)("Parse Address", () => __awaiter(this, void 0, void 0, function* () {
         const rpcResponse = {
             type: "ByteString",
