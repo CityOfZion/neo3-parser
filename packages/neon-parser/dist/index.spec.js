@@ -21,7 +21,7 @@ const assert = require("assert");
         assert.equal(_1.NeonParser.accountInputToScripthash("NhGomBpYnKXArr55nHRQ5rzy79TwKVXZbr"), "857a247939db5c7cd3a7bb14791280c09e824bea");
     }));
 });
-(0, mocha_1.describe)("RPC Parser Tests", function () {
+(0, mocha_1.describe)("RPC Response Parser Tests", function () {
     (0, mocha_1.it)("Parse Address", () => __awaiter(this, void 0, void 0, function* () {
         const rpcResponse = {
             type: "ByteString",
@@ -453,6 +453,266 @@ const assert = require("assert");
         };
         const parsed = _1.NeonParser.parseRpcResponse(rpcResponse);
         assert.deepEqual(parsed, { name: 'LIZARD', seed: 'dphNnS0kGxelyR4Q8ntrbA==' });
+    }));
+});
+(0, mocha_1.describe)("RPC Arguments Parser Tests", function () {
+    (0, mocha_1.it)("parses numbers", () => __awaiter(this, void 0, void 0, function* () {
+        let numberArg = _1.NeonParser.formatRpcArgument(0);
+        let expectedResult = { type: 'Integer', value: '0' };
+        assert.deepStrictEqual(numberArg, expectedResult);
+        numberArg = _1.NeonParser.formatRpcArgument(1);
+        expectedResult = { type: 'Integer', value: '1' };
+        assert.deepStrictEqual(numberArg, expectedResult);
+        numberArg = _1.NeonParser.formatRpcArgument(123);
+        expectedResult = { type: 'Integer', value: '123' };
+        assert.deepStrictEqual(numberArg, expectedResult);
+        numberArg = _1.NeonParser.formatRpcArgument(-10);
+        expectedResult = { type: 'Integer', value: '-10' };
+        assert.deepStrictEqual(numberArg, expectedResult);
+    }));
+    (0, mocha_1.it)("parses boolean", () => __awaiter(this, void 0, void 0, function* () {
+        let booleanArg = _1.NeonParser.formatRpcArgument(true);
+        let expectedResult = { type: 'Boolean', value: true };
+        assert.deepStrictEqual(booleanArg, expectedResult);
+        booleanArg = _1.NeonParser.formatRpcArgument(false);
+        expectedResult = { type: 'Boolean', value: false };
+        assert.deepStrictEqual(booleanArg, expectedResult);
+    }));
+    (0, mocha_1.it)("parses string", () => __awaiter(this, void 0, void 0, function* () {
+        let stringArg = _1.NeonParser.formatRpcArgument('unit test');
+        let expectedResult = { type: 'String', value: 'unit test' };
+        assert.deepStrictEqual(stringArg, expectedResult);
+        stringArg = _1.NeonParser.formatRpcArgument('1234');
+        expectedResult = { type: 'String', value: '1234' };
+        assert.deepStrictEqual(stringArg, expectedResult);
+    }));
+    (0, mocha_1.it)("parses ByteArray", () => __awaiter(this, void 0, void 0, function* () {
+        let byteArrayValue = _1.NeonParser.strToBase64('unit test');
+        let byteArrayArg = _1.NeonParser.formatRpcArgument(byteArrayValue, { type: 'ByteArray' });
+        let expectedResult = { type: 'ByteArray', value: byteArrayValue };
+        assert.deepStrictEqual(byteArrayArg, expectedResult);
+        byteArrayValue = _1.NeonParser.strToBase64('another value 1234');
+        byteArrayArg = _1.NeonParser.formatRpcArgument(byteArrayValue, { type: 'ByteArray' });
+        expectedResult = { type: 'ByteArray', value: byteArrayValue };
+        assert.deepStrictEqual(byteArrayArg, expectedResult);
+        // Not passing a config will endup returning a String instead of a ByteArray
+        byteArrayArg = _1.NeonParser.formatRpcArgument(byteArrayValue);
+        expectedResult = { type: 'ByteArray', value: byteArrayValue };
+        assert.notDeepStrictEqual(byteArrayArg, expectedResult);
+    }));
+    (0, mocha_1.it)("parses Hash160", () => __awaiter(this, void 0, void 0, function* () {
+        let hash160Arg = _1.NeonParser.formatRpcArgument('0xd2a4cff31913016155e38e474a2c06d08be276cf', { type: 'Hash160' });
+        let expectedResult = { type: 'Hash160', value: 'd2a4cff31913016155e38e474a2c06d08be276cf' };
+        assert.deepStrictEqual(hash160Arg, expectedResult);
+        hash160Arg = _1.NeonParser.formatRpcArgument('d2a4cff31913016155e38e474a2c06d08be276cf', { type: 'Hash160' });
+        expectedResult = { type: 'Hash160', value: 'd2a4cff31913016155e38e474a2c06d08be276cf' };
+        assert.deepStrictEqual(hash160Arg, expectedResult);
+        // Not passing a config will endup returning a String instead of a Hash160
+        hash160Arg = _1.NeonParser.formatRpcArgument('d2a4cff31913016155e38e474a2c06d08be276cf');
+        expectedResult = { type: 'Hash160', value: 'd2a4cff31913016155e38e474a2c06d08be276cf' };
+        assert.notDeepStrictEqual(hash160Arg, expectedResult);
+    }));
+    (0, mocha_1.it)("parses Hash256", () => __awaiter(this, void 0, void 0, function* () {
+        let hash256Arg = _1.NeonParser.formatRpcArgument('0xd2b24b57ea05821766877241a51e17eae06ed66a6c72adb5727f8ba701d995be', { type: 'Hash256' });
+        let expectedResult = { type: 'Hash256', value: 'd2b24b57ea05821766877241a51e17eae06ed66a6c72adb5727f8ba701d995be' };
+        assert.deepStrictEqual(hash256Arg, expectedResult);
+        hash256Arg = _1.NeonParser.formatRpcArgument('d2b24b57ea05821766877241a51e17eae06ed66a6c72adb5727f8ba701d995be', { type: 'Hash256' });
+        expectedResult = { type: 'Hash256', value: 'd2b24b57ea05821766877241a51e17eae06ed66a6c72adb5727f8ba701d995be' };
+        assert.deepStrictEqual(hash256Arg, expectedResult);
+        // Not passing a config will endup returning a String instead of a Hash256
+        hash256Arg = _1.NeonParser.formatRpcArgument('d2b24b57ea05821766877241a51e17eae06ed66a6c72adb5727f8ba701d995be');
+        expectedResult = { type: 'Hash256', value: 'd2b24b57ea05821766877241a51e17eae06ed66a6c72adb5727f8ba701d995be' };
+        assert.notDeepStrictEqual(hash256Arg, expectedResult);
+    }));
+    (0, mocha_1.it)("parses PublicKey", () => __awaiter(this, void 0, void 0, function* () {
+        let publicKeyArg = _1.NeonParser.formatRpcArgument('035a928f201639204e06b4368b1a93365462a8ebbff0b8818151b74faab3a2b61a', { type: 'PublicKey' });
+        const expectedResult = { type: 'PublicKey', value: '035a928f201639204e06b4368b1a93365462a8ebbff0b8818151b74faab3a2b61a' };
+        assert.deepStrictEqual(publicKeyArg, expectedResult);
+        publicKeyArg = _1.NeonParser.formatRpcArgument('035a928f201639204e06b4368b1a93365462a8ebbff0b8818151b74faab3a2b61a');
+        assert.notDeepStrictEqual(publicKeyArg, expectedResult);
+    }));
+    (0, mocha_1.it)("parses array of primitive types", () => __awaiter(this, void 0, void 0, function* () {
+        let arrayArg = _1.NeonParser.formatRpcArgument([1, 2, 3], { type: "Array", generic: { type: "Integer" } });
+        let arrayArgNoConfig = _1.NeonParser.formatRpcArgument([1, 2, 3]);
+        let expectedResult = { type: 'Array', value: [
+                { type: 'Integer', value: '1' },
+                { type: 'Integer', value: '2' },
+                { type: 'Integer', value: '3' },
+            ] };
+        assert.deepStrictEqual(arrayArg, expectedResult);
+        assert.deepStrictEqual(arrayArg, arrayArgNoConfig);
+        arrayArg = _1.NeonParser.formatRpcArgument([true, false], { type: "Array", generic: { type: "Boolean" } });
+        arrayArgNoConfig = _1.NeonParser.formatRpcArgument([true, false]);
+        expectedResult = { type: 'Array', value: [
+                { type: 'Boolean', value: true },
+                { type: 'Boolean', value: false },
+            ] };
+        assert.deepStrictEqual(arrayArg, expectedResult);
+        assert.deepStrictEqual(arrayArg, arrayArgNoConfig);
+        arrayArg = _1.NeonParser.formatRpcArgument(['unit', 'test'], { type: "Array", generic: { type: "String" } });
+        arrayArgNoConfig = _1.NeonParser.formatRpcArgument(['unit', 'test']);
+        expectedResult = { type: 'Array', value: [
+                { type: 'String', value: 'unit' },
+                { type: 'String', value: 'test' },
+            ] };
+        assert.deepStrictEqual(arrayArg, expectedResult);
+        assert.deepStrictEqual(arrayArg, arrayArgNoConfig);
+        arrayArg = _1.NeonParser.formatRpcArgument(['Zmlyc3Q=', 'c2Vjb25k'], { type: "Array", generic: { type: "ByteArray" } });
+        arrayArgNoConfig = _1.NeonParser.formatRpcArgument(['unit', 'test']);
+        expectedResult = { type: 'Array', value: [
+                { type: 'ByteArray', value: 'Zmlyc3Q=' },
+                { type: 'ByteArray', value: 'c2Vjb25k' },
+            ] };
+        assert.deepStrictEqual(arrayArg, expectedResult);
+        assert.notDeepStrictEqual(arrayArg, arrayArgNoConfig);
+    }));
+    (0, mocha_1.it)("parses map of primitive types", () => __awaiter(this, void 0, void 0, function* () {
+        let mapArg = _1.NeonParser.formatRpcArgument({}, { type: "Map" });
+        let mapArgNoConfig = _1.NeonParser.formatRpcArgument({});
+        let expectedResult = {
+            "type": "Map",
+            "value": []
+        };
+        assert.deepStrictEqual(mapArg, expectedResult);
+        assert.deepStrictEqual(mapArg, mapArgNoConfig);
+        mapArg = _1.NeonParser.formatRpcArgument({ unit: 'test', neon: 'parser', neo3: 'parser' }, { type: "Map", genericKey: { type: "String" }, genericItem: { type: "String" } });
+        mapArgNoConfig = _1.NeonParser.formatRpcArgument({ unit: 'test', neon: 'parser', neo3: 'parser' });
+        expectedResult = {
+            "type": "Map",
+            "value": [
+                {
+                    "key": {
+                        "type": "String",
+                        "value": "unit"
+                    },
+                    "value": {
+                        "type": "String",
+                        "value": "test"
+                    }
+                },
+                {
+                    "key": {
+                        "type": "String",
+                        "value": "neon"
+                    },
+                    "value": {
+                        "type": "String",
+                        "value": "parser"
+                    }
+                },
+                {
+                    "key": {
+                        "type": "String",
+                        "value": "neo3"
+                    },
+                    "value": {
+                        "type": "String",
+                        "value": "parser"
+                    }
+                }
+            ]
+        };
+        assert.deepStrictEqual(mapArg, expectedResult);
+        assert.deepStrictEqual(mapArg, mapArgNoConfig);
+        mapArg = _1.NeonParser.formatRpcArgument({ true: true, false: false }, { type: "Map", genericKey: { type: "Boolean" }, genericItem: { type: "Boolean" } });
+        mapArgNoConfig = _1.NeonParser.formatRpcArgument({ true: true, false: false });
+        expectedResult = {
+            "type": "Map",
+            "value": [
+                {
+                    "key": {
+                        "type": "Boolean",
+                        "value": true
+                    },
+                    "value": {
+                        "type": "Boolean",
+                        "value": true
+                    }
+                },
+                {
+                    "key": {
+                        "type": "Boolean",
+                        "value": false
+                    },
+                    "value": {
+                        "type": "Boolean",
+                        "value": false
+                    }
+                }
+            ]
+        };
+        assert.deepStrictEqual(mapArg, expectedResult);
+        assert.notDeepStrictEqual(mapArg, mapArgNoConfig);
+        mapArg = _1.NeonParser.formatRpcArgument({ 98765: 12345 }, { type: "Map", genericKey: { type: "Integer" }, genericItem: { type: "Integer" } });
+        mapArgNoConfig = _1.NeonParser.formatRpcArgument({ 98765: 12345 });
+        expectedResult = {
+            "type": "Map",
+            "value": [
+                {
+                    "key": {
+                        "type": "Integer",
+                        "value": "98765"
+                    },
+                    "value": {
+                        "type": "Integer",
+                        "value": '12345'
+                    }
+                }
+            ]
+        };
+        assert.deepStrictEqual(mapArg, expectedResult);
+        assert.notDeepStrictEqual(mapArg, mapArgNoConfig);
+        mapArg = _1.NeonParser.formatRpcArgument({ 'Ynl0ZUFycmF5': 'dW5pdCB0ZXN0' }, { type: "Map", genericKey: { type: "ByteArray" }, genericItem: { type: "ByteArray" } });
+        mapArgNoConfig = _1.NeonParser.formatRpcArgument({ 'Ynl0ZUFycmF5': _1.NeonParser.strToBase64('unit test') });
+        expectedResult = {
+            "type": "Map",
+            "value": [
+                {
+                    "key": {
+                        "type": "ByteArray",
+                        "value": "Ynl0ZUFycmF5"
+                    },
+                    "value": {
+                        "type": "ByteArray",
+                        "value": 'dW5pdCB0ZXN0'
+                    }
+                }
+            ]
+        };
+        assert.deepStrictEqual(mapArg, expectedResult);
+        assert.notDeepStrictEqual(mapArg, mapArgNoConfig);
+    }));
+    (0, mocha_1.it)("parses Any", () => __awaiter(this, void 0, void 0, function* () {
+        let anyArg = _1.NeonParser.formatRpcArgument(12345, { type: "Any" });
+        let expectedResult = {
+            "type": "Integer",
+            "value": "12345"
+        };
+        assert.deepStrictEqual(anyArg, expectedResult);
+        anyArg = _1.NeonParser.formatRpcArgument(false, { type: "Any" });
+        expectedResult = {
+            "type": "Boolean",
+            "value": false
+        };
+        assert.deepStrictEqual(anyArg, expectedResult);
+        anyArg = _1.NeonParser.formatRpcArgument('unit test', { type: "Any" });
+        expectedResult = {
+            "type": "String",
+            "value": 'unit test'
+        };
+        assert.deepStrictEqual(anyArg, expectedResult);
+        anyArg = _1.NeonParser.formatRpcArgument([1, 2], { type: "Any" });
+        expectedResult = {
+            "type": "Array",
+            "value": [
+                { "type": "Integer", "value": "1" },
+                { "type": "Integer", "value": "2" }
+            ]
+        };
+        assert.deepStrictEqual(anyArg, expectedResult);
+        anyArg = _1.NeonParser.formatRpcArgument(null, { type: "Any" });
+        expectedResult = { "type": "Any", value: null };
+        assert.deepStrictEqual(anyArg, expectedResult);
     }));
 });
 //# sourceMappingURL=index.spec.js.map
