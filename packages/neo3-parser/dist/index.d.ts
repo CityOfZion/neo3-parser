@@ -98,10 +98,10 @@ export interface Neo3Parser {
     parseRpcResponse: (field: RpcResponse, parseConfig?: ParseConfig) => any;
     /**
      * Formats the argument that will be sent to the RPC server
-     * @param args the argument that will be formatted
+     * @param arg the argument that will be formatted
      * @param parseConfig how to format the argument
      */
-    formatRpcArgument: (args: any, parseConfig?: ParseConfig) => FormattedArg;
+    formatRpcArgument: (arg: any, parseConfig?: ParseConfig) => FormattedArg;
 }
 export type AnyArgType = {
     type: 'Any';
