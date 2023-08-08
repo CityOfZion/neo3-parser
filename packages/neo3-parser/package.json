@@ -1,6 +1,6 @@
 {
   "name": "@cityofzion/neo3-parser",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,6 +9,9 @@
   ],
   "scripts": {
     "build": "tsc && typedoc src/index.ts"
+  },
+  "dependencies": {
+    "@cityofzion/neo3-invoker": "1.7.0"
   },
   "devDependencies": {
     "typescript": "^4.3.2",

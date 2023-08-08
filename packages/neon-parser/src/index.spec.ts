@@ -1,7 +1,7 @@
 import { NeonParser } from "."
 import {describe, it} from "mocha"
 import * as assert from "assert";
-import { RpcResponse } from "@cityofzion/neo3-parser";
+import { RpcResponseStackItem } from "@cityofzion/neo3-invoker";
 
 
 describe("Neon-Parser Tests", function () {
@@ -20,7 +20,7 @@ describe("Neon-Parser Tests", function () {
 describe("RPC Response Parser Tests", function () {
 
   it("Parse Address", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       value: NeonParser.asciiToBase64("NNLi44dJNXtDNSBkofB48aTVYtb1zZrNEs")
     }
@@ -30,7 +30,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse invalid Address", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       // Address will end up too short
       value: NeonParser.hexToBase64("Nnnnnnnnnnnnnnnn")
@@ -51,7 +51,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse ScriptHash and ScriptHashLittleEndian", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       value: NeonParser.hexToBase64("61479ab68fd5c2c04b254f382d84ddf2f5c67ced")
     }
@@ -64,7 +64,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse invalid ScriptHash and ScriptHashLittleEndian", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       // ScriptHash will end up too short
       value: NeonParser.hexToBase64("61479ab68fd5c2c04b25")
@@ -79,7 +79,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse BlockHash or TransactionId", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       value: NeonParser.hexToBase64(
         NeonParser.reverseHex("0x6c513de791b17ddadec205a07301229ac890d71c16c1d5a0320c655fb69214fc".substring(2))
@@ -97,7 +97,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse ByteString without parseConfig", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       value: NeonParser.asciiToBase64("Testing")
     }
@@ -111,7 +111,7 @@ describe("RPC Response Parser Tests", function () {
 
 
   it("Parse Integer", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "Integer",
       value: "18"
     }
@@ -121,7 +121,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse single type Array", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       type: "Array",
       value: [
         {
@@ -186,7 +186,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse Union", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       value: NeonParser.strToBase64("test")
     }
@@ -209,7 +209,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Try parse same internal types with Union", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       type: "ByteString",
       value: NeonParser.strToBase64("test")
     }
@@ -221,7 +221,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse multiple types Array", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       type: "Array",
       value: [
         {
@@ -293,7 +293,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse single type Map", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       type: "Map",
       value: [
         {
@@ -330,7 +330,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse multiple types Map", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       type: "Map",
       value: [
         {
@@ -376,7 +376,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse Boolean", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       "type": "Boolean",
       "value": true
     }
@@ -394,7 +394,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse Iterator", async () => {
-    let rpcResponse: RpcResponse = {
+    let rpcResponse: RpcResponseStackItem = {
       "type": "InteropInterface",
       "interface": "IIterator",
       "id": "e93e82f7-629b-4b4b-9fae-054d18bd32e2"
@@ -406,7 +406,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse Array inside Map", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       type: "Map",
       value: [
         {
@@ -450,7 +450,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse Map inside Array", async () => {
-    const rpcResponseArray: RpcResponse = {
+    const rpcResponseArray: RpcResponseStackItem = {
       type: "Array",
       value: [
         { type: "ByteString", value: NeonParser.strToBase64("abc") },
@@ -478,7 +478,7 @@ describe("RPC Response Parser Tests", function () {
   })
 
   it("Parse raw when UTF8 parsing fails", async () => {
-    const rpcResponse: RpcResponse = {
+    const rpcResponse: RpcResponseStackItem = {
       "type": "Map",
       "value": [
         {

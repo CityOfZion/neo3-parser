@@ -1,7 +1,29 @@
 import {
-  Neo3Parser, ParseConfig, RpcResponse,
-  ABI_TYPES, HINT_TYPES, IntegerArgType, ArrayResponseArgType, ArrayConfigArgType, MapResponseArgType, MapConfigArgType, InteropInterfaceConfigArgType, FormattedArg, ByteArrayArgType, Hash160ArgType, Hash256ArgType, PublicKeyArgType, StringArgType, BooleanArgType, AnyArgType, ByteStringArgType, Hash160ConfigArgType, StringConfigArgType
+  Neo3Parser, 
+  ParseConfig,
+  ABI_TYPES, 
+  HINT_TYPES, 
+  ArrayConfigArgType,
+  MapConfigArgType, 
+  InteropInterfaceConfigArgType, 
+  Hash160ConfigArgType, 
+  StringConfigArgType
 } from '@cityofzion/neo3-parser'
+import {
+  AnyArgType,
+  Arg, 
+  ArrayResponseArgType, 
+  BooleanArgType, 
+  ByteArrayArgType, 
+  ByteStringArgType, 
+  Hash160ArgType, 
+  Hash256ArgType, 
+  IntegerArgType, 
+  MapResponseArgType, 
+  PublicKeyArgType, 
+  RpcResponseStackItem, 
+  StringArgType
+} from '@cityofzion/neo3-invoker'
 import { u, wallet, sc } from '@cityofzion/neon-js'
 
 
@@ -60,7 +82,7 @@ const NeonParser: Neo3Parser = {
   asciiToBase64(input: string): string {
     return u.HexString.fromAscii(input).toBase64()
   },
-  parseRpcResponse(field: RpcResponse, parseConfig?: ParseConfig): any {
+  parseRpcResponse(field: RpcResponseStackItem, parseConfig?: ParseConfig): any {
     parseConfig = verifyParseConfigUnion(field, parseConfig)
 
     switch (field.type) {
@@ -69,7 +91,7 @@ const NeonParser: Neo3Parser = {
       case "Integer":
         return parseInt((field as IntegerArgType).value as string)
       case "Array":
-        return ((field as ArrayResponseArgType).value as RpcResponse[]).map( (f: any) => {
+        return ((field as ArrayResponseArgType).value as RpcResponseStackItem[]).map( (f: any) => {
           return NeonParser.parseRpcResponse(f, (parseConfig as ArrayConfigArgType)?.generic)
         })
       case "Map":
@@ -88,14 +110,14 @@ const NeonParser: Neo3Parser = {
         return
       default:
         try {
-          return JSON.parse((field as Exclude<RpcResponse, InteropInterfaceConfigArgType>).value as string)
+          return JSON.parse((field as Exclude<RpcResponseStackItem, InteropInterfaceConfigArgType>).value as string)
         } catch (e) {
-          return (field as Exclude<RpcResponse, InteropInterfaceConfigArgType>).value
+          return (field as Exclude<RpcResponseStackItem, InteropInterfaceConfigArgType>).value
         }
     }
   },
 
-  formatRpcArgument(arg: any, parseConfig?: ParseConfig): FormattedArg {   
+  formatRpcArgument(arg: any, parseConfig?: ParseConfig): Arg {   
     const argType = parseConfig && parseConfig.type !== "Any" ? parseConfig.type : typeof arg
 
     switch(argType) {
@@ -155,7 +177,7 @@ const NeonParser: Neo3Parser = {
   }
 }
 
-function verifyParseConfigUnion(field: RpcResponse, parseConfig?: ParseConfig) {
+function verifyParseConfigUnion(field: RpcResponseStackItem, parseConfig?: ParseConfig) {
   if (parseConfig?.type === 'Any' && parseConfig?.union){
     const configs = parseConfig?.union.filter( (config) => {
       return ABI_TYPES[config.type.toUpperCase()].internal.toUpperCase() === field.type.toUpperCase()
