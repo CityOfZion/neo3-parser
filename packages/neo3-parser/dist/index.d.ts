@@ -1,3 +1,4 @@
+import { Arg, RpcResponseStackItem } from '@cityofzion/neo3-invoker';
 export interface Neo3Parser {
     /**
      * Converts an ArrayBuffer to an ASCII string.
@@ -95,77 +96,14 @@ export interface Neo3Parser {
      * Formats the response from the RPC server to an easier to use format for dapp developers
      * @param input The response from the RPC server
      */
-    parseRpcResponse: (field: RpcResponse, parseConfig?: ParseConfig) => any;
+    parseRpcResponse: (field: RpcResponseStackItem, parseConfig?: ParseConfig) => any;
     /**
      * Formats the argument that will be sent to the RPC server
      * @param arg the argument that will be formatted
      * @param parseConfig how to format the argument
      */
-    formatRpcArgument: (arg: any, parseConfig?: ParseConfig) => FormattedArg;
+    formatRpcArgument: (arg: any, parseConfig?: ParseConfig) => Arg;
 }
-export type AnyArgType = {
-    type: 'Any';
-    value: null;
-};
-export type StringArgType = {
-    type: 'String';
-    value: string;
-};
-export type ByteArrayArgType = {
-    type: 'ByteArray';
-    value: string;
-};
-export type BooleanArgType = {
-    type: 'Boolean';
-    value: boolean;
-};
-export type PublicKeyArgType = {
-    type: 'PublicKey';
-    value: string;
-};
-export type Hash160ArgType = {
-    type: 'Hash160';
-    value: string;
-};
-export type Hash256ArgType = {
-    type: 'Hash256';
-    value: string;
-};
-export type IntegerArgType = {
-    type: 'Integer';
-    value: string;
-};
-export type ArrayFormatArgType = {
-    type: 'Array';
-    value: FormattedArg[];
-};
-export type MapFormatArgType = {
-    type: 'Map';
-    value: {
-        key: FormattedArg;
-        value: FormattedArg;
-    }[];
-};
-export type ArrayResponseArgType = {
-    type: 'Array';
-    value: RpcResponse[];
-};
-export type MapResponseArgType = {
-    type: 'Map';
-    value: {
-        key: RpcResponse;
-        value: RpcResponse;
-    }[];
-};
-export type ByteStringArgType = {
-    type: 'ByteString';
-    value: string;
-};
-export type InteropInterfaceArgType = {
-    type: 'InteropInterface';
-    interface: string;
-    id: string;
-};
 export type AnyConfigArgType = {
     type: 'Any';
     union?: ParseConfig[];
@@ -208,8 +146,6 @@ export type InteropInterfaceConfigArgType = {
     type: 'InteropInterface';
     hint?: string;
 };
-export type FormattedArg = AnyArgType | StringArgType | ByteArrayArgType | BooleanArgType | PublicKeyArgType | Hash160ArgType | Hash256ArgType | IntegerArgType | ArrayFormatArgType | MapFormatArgType;
-export type RpcResponse = AnyArgType | BooleanArgType | IntegerArgType | ArrayResponseArgType | MapResponseArgType | ByteStringArgType | InteropInterfaceArgType;
 export type ParseConfig = AnyConfigArgType | StringConfigArgType | BooleanConfigArgType | ByteArrayConfigArgType | PublicKeyConfigArgType | Hash160ConfigArgType | Hash256ConfigArgType | IntegerConfigArgType | ArrayConfigArgType | MapConfigArgType | InteropInterfaceConfigArgType;
 export declare const INTERNAL_TYPES: {
     ARRAY: string;
