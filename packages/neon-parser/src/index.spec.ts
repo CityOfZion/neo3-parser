@@ -109,6 +109,16 @@ describe("RPC Response Parser Tests", function () {
     assert.deepEqual(bytesValue, "54657374696e67") 
   })
 
+  it("Parse PublicKey", async () => {
+    const rpcResponse: RpcResponseStackItem = {
+      type: "ByteString",
+      value: NeonParser.hexToBase64("03cdb067d930fd5adaa6c68545016044aaddec64ba39e548250eaea551172e535c")
+    }
+
+    const scriptHash = NeonParser.parseRpcResponse(rpcResponse, {type: "PublicKey"})
+    assert.deepEqual(scriptHash, "03cdb067d930fd5adaa6c68545016044aaddec64ba39e548250eaea551172e535c") 
+  })
+
 
   it("Parse Integer", async () => {
     const rpcResponse: RpcResponseStackItem = {
@@ -550,12 +560,12 @@ describe("RPC Arguments Parser Tests", function () {
   })
 
   it("parses ByteArray", async () => {
-    let byteArrayValue = NeonParser.strToBase64('unit test')
+    let byteArrayValue = NeonParser.strToHexstring('unit test')
     let byteArrayArg = NeonParser.formatRpcArgument(byteArrayValue, {type: 'ByteArray'})
     let expectedResult = { type: 'ByteArray', value: byteArrayValue }
     assert.deepStrictEqual(byteArrayArg, expectedResult)
 
-    byteArrayValue = NeonParser.strToBase64('another value 1234')
+    byteArrayValue = NeonParser.strToHexstring('another value 1234')
     byteArrayArg = NeonParser.formatRpcArgument(byteArrayValue, {type: 'ByteArray'})
     expectedResult = { type: 'ByteArray', value: byteArrayValue }
     assert.deepStrictEqual(byteArrayArg, expectedResult) 
@@ -637,12 +647,12 @@ describe("RPC Arguments Parser Tests", function () {
     assert.deepStrictEqual(arrayArg, expectedResult) 
     assert.deepStrictEqual(arrayArg, arrayArgNoConfig) 
 
-    arrayArg = NeonParser.formatRpcArgument(['Zmlyc3Q=', 'c2Vjb25k'], { type: "Array", generic: { type: "ByteArray" } })
+    arrayArg = NeonParser.formatRpcArgument(['756e6974', '74657374'], { type: "Array", generic: { type: "ByteArray" } })
     arrayArgNoConfig = NeonParser.formatRpcArgument(['unit', 'test'])
     expectedResult = { type: 'Array', value: [
-      { type: 'ByteArray', value: 'Zmlyc3Q=' },
-      { type: 'ByteArray', value: 'c2Vjb25k' },
-  ] }
+      { type: 'ByteArray', value: '756e6974' },
+      { type: 'ByteArray', value: '74657374' },
+    ] }
     assert.deepStrictEqual(arrayArg, expectedResult) 
     assert.notDeepStrictEqual(arrayArg, arrayArgNoConfig) 
   })
@@ -763,11 +773,11 @@ describe("RPC Arguments Parser Tests", function () {
     assert.notDeepStrictEqual(mapArg, mapArgNoConfig) 
 
     mapArg = NeonParser.formatRpcArgument(
-      { 'Ynl0ZUFycmF5' : 'dW5pdCB0ZXN0' },
+      { '627974654172726179' : NeonParser.strToHexstring('unit test') },
       { type: "Map", genericKey: { type: "ByteArray" }, genericItem: { type: "ByteArray" } },
       )
     mapArgNoConfig = NeonParser.formatRpcArgument(
-      { 'Ynl0ZUFycmF5' : NeonParser.strToBase64('unit test') },
+      { '627974654172726179' : NeonParser.strToHexstring('unit test') },
     )
     expectedResult = {
       "type": "Map",
@@ -775,11 +785,11 @@ describe("RPC Arguments Parser Tests", function () {
         {
           "key": {
               "type": "ByteArray",
-              "value": "Ynl0ZUFycmF5"
+              "value": "627974654172726179"
           },
           "value": {
               "type": "ByteArray",
-              "value": 'dW5pdCB0ZXN0'
+              "value": "756e69742074657374"
           }
         }
       ]

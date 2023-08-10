@@ -122,7 +122,7 @@ const NeonParser: Neo3Parser = {
 
     switch(argType) {
       case "ByteArray": {
-        return sc.ContractParam.byteArray(arg).toJson() as ByteArrayArgType
+        return { type: "ByteArray", value: arg }
       }
       case "Hash160": {
         return sc.ContractParam.hash160(arg).toJson() as Hash160ArgType
@@ -211,7 +211,7 @@ function parseByteString({value}: ByteStringArgType, parseConfig?: ParseConfig) 
 
   const rawValue = NeonParser.base64ToHex(valueToParse)
 
-  if (parseConfig?.type === ABI_TYPES.BYTEARRAY.name){
+  if (parseConfig?.type === ABI_TYPES.BYTEARRAY.name || parseConfig?.type === ABI_TYPES.PUBLICKEY.name){
     return rawValue
   }
 

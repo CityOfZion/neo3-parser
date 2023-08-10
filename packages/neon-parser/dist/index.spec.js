@@ -93,6 +93,14 @@ const assert = require("assert");
         const bytesValue = _1.NeonParser.parseRpcResponse(rpcResponse, { type: 'ByteArray' });
         assert.deepEqual(bytesValue, "54657374696e67");
     }));
+    (0, mocha_1.it)("Parse PublicKey", () => __awaiter(this, void 0, void 0, function* () {
+        const rpcResponse = {
+            type: "ByteString",
+            value: _1.NeonParser.hexToBase64("03cdb067d930fd5adaa6c68545016044aaddec64ba39e548250eaea551172e535c")
+        };
+        const scriptHash = _1.NeonParser.parseRpcResponse(rpcResponse, { type: "PublicKey" });
+        assert.deepEqual(scriptHash, "03cdb067d930fd5adaa6c68545016044aaddec64ba39e548250eaea551172e535c");
+    }));
     (0, mocha_1.it)("Parse Integer", () => __awaiter(this, void 0, void 0, function* () {
         const rpcResponse = {
             type: "Integer",
@@ -487,11 +495,11 @@ const assert = require("assert");
         assert.deepStrictEqual(stringArg, expectedResult);
     }));
     (0, mocha_1.it)("parses ByteArray", () => __awaiter(this, void 0, void 0, function* () {
-        let byteArrayValue = _1.NeonParser.strToBase64('unit test');
+        let byteArrayValue = _1.NeonParser.strToHexstring('unit test');
         let byteArrayArg = _1.NeonParser.formatRpcArgument(byteArrayValue, { type: 'ByteArray' });
         let expectedResult = { type: 'ByteArray', value: byteArrayValue };
         assert.deepStrictEqual(byteArrayArg, expectedResult);
-        byteArrayValue = _1.NeonParser.strToBase64('another value 1234');
+        byteArrayValue = _1.NeonParser.strToHexstring('another value 1234');
         byteArrayArg = _1.NeonParser.formatRpcArgument(byteArrayValue, { type: 'ByteArray' });
         expectedResult = { type: 'ByteArray', value: byteArrayValue };
         assert.deepStrictEqual(byteArrayArg, expectedResult);
@@ -557,11 +565,11 @@ const assert = require("assert");
             ] };
         assert.deepStrictEqual(arrayArg, expectedResult);
         assert.deepStrictEqual(arrayArg, arrayArgNoConfig);
-        arrayArg = _1.NeonParser.formatRpcArgument(['Zmlyc3Q=', 'c2Vjb25k'], { type: "Array", generic: { type: "ByteArray" } });
+        arrayArg = _1.NeonParser.formatRpcArgument(['756e6974', '74657374'], { type: "Array", generic: { type: "ByteArray" } });
         arrayArgNoConfig = _1.NeonParser.formatRpcArgument(['unit', 'test']);
         expectedResult = { type: 'Array', value: [
-                { type: 'ByteArray', value: 'Zmlyc3Q=' },
-                { type: 'ByteArray', value: 'c2Vjb25k' },
+                { type: 'ByteArray', value: '756e6974' },
+                { type: 'ByteArray', value: '74657374' },
             ] };
         assert.deepStrictEqual(arrayArg, expectedResult);
         assert.notDeepStrictEqual(arrayArg, arrayArgNoConfig);
@@ -662,19 +670,19 @@ const assert = require("assert");
         };
         assert.deepStrictEqual(mapArg, expectedResult);
         assert.notDeepStrictEqual(mapArg, mapArgNoConfig);
-        mapArg = _1.NeonParser.formatRpcArgument({ 'Ynl0ZUFycmF5': 'dW5pdCB0ZXN0' }, { type: "Map", genericKey: { type: "ByteArray" }, genericItem: { type: "ByteArray" } });
-        mapArgNoConfig = _1.NeonParser.formatRpcArgument({ 'Ynl0ZUFycmF5': _1.NeonParser.strToBase64('unit test') });
+        mapArg = _1.NeonParser.formatRpcArgument({ '627974654172726179': _1.NeonParser.strToHexstring('unit test') }, { type: "Map", genericKey: { type: "ByteArray" }, genericItem: { type: "ByteArray" } });
+        mapArgNoConfig = _1.NeonParser.formatRpcArgument({ '627974654172726179': _1.NeonParser.strToHexstring('unit test') });
         expectedResult = {
             "type": "Map",
             "value": [
                 {
                     "key": {
                         "type": "ByteArray",
-                        "value": "Ynl0ZUFycmF5"
+                        "value": "627974654172726179"
                     },
                     "value": {
                         "type": "ByteArray",
-                        "value": 'dW5pdCB0ZXN0'
+                        "value": "756e69742074657374"
                     }
                 }
             ]
