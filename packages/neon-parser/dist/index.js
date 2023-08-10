@@ -92,7 +92,7 @@ const NeonParser = {
         const argType = parseConfig && parseConfig.type !== "Any" ? parseConfig.type : typeof arg;
         switch (argType) {
             case "ByteArray": {
-                return neon_js_1.sc.ContractParam.byteArray(arg).toJson();
+                return { type: "ByteArray", value: arg };
             }
             case "Hash160": {
                 return neon_js_1.sc.ContractParam.hash160(arg).toJson();
@@ -175,7 +175,7 @@ function verifyParseConfigUnion(field, parseConfig) {
 function parseByteString({ value }, parseConfig) {
     const valueToParse = value;
     const rawValue = NeonParser.base64ToHex(valueToParse);
-    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type) === neo3_parser_1.ABI_TYPES.BYTEARRAY.name) {
+    if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type) === neo3_parser_1.ABI_TYPES.BYTEARRAY.name || (parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type) === neo3_parser_1.ABI_TYPES.PUBLICKEY.name) {
         return rawValue;
     }
     if ((parseConfig === null || parseConfig === void 0 ? void 0 : parseConfig.type) === neo3_parser_1.ABI_TYPES.HASH160.name) {
